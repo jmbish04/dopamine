@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Neural Flow - AI Lofi DJ</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f27f0d",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#121212",
+                        "surface-dark": "#1e1e1e",
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "1.5rem",
+                        "xl": "2rem",
+                        "2xl": "2.5rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        "glow": "0 0 20px rgba(242, 127, 13, 0.15)",
+                        "glow-strong": "0 0 40px rgba(242, 127, 13, 0.25)",
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for chat */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Range slider styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #f27f0d;
+            cursor: pointer;
+            margin-top: -6px;
+            box-shadow: 0 0 10px rgba(242, 127, 13, 0.5);
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #404040;
+            border-radius: 2px;
+        }
+
+        input[type=range]:focus::-webkit-slider-runnable-track {
+            background: #505050;
+        }
+
+        /* Animation for sound wave */
+        @keyframes sound-wave {
+            0% { height: 20%; }
+            50% { height: 100%; }
+            100% { height: 20%; }
+        }
+
+        .wave-bar {
+            animation: sound-wave 1.2s ease-in-out infinite;
+        }
+
+        .wave-bar:nth-child(odd) {
+            animation-duration: 1.5s;
+        }
+
+        .wave-bar:nth-child(2n) {
+            animation-duration: 1.1s;
+        }
+
+        .wave-bar:nth-child(3n) {
+            animation-duration: 1.3s;
+        }
+
+        .wave-bar:nth-child(4n) {
+            animation-duration: 0.9s;
+        }
+
+        .bg-pattern {
+            background-image: radial-gradient(#2a2a2a 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased overflow-hidden h-screen flex flex-col">
+<!-- Top Navigation (Adapted from provided component) -->
+<header class="flex shrink-0 items-center justify-between whitespace-nowrap border-b border-white/5 bg-[#18120d] px-6 py-4 z-50">
+<div class="flex items-center gap-4 text-white">
+<div class="size-8 flex items-center justify-center rounded-full bg-primary/20 text-primary">
+<span class="material-symbols-outlined text-[20px]">graphic_eq</span>
+</div>
+<h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">Neural Flow</h2>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex gap-1 bg-surface-dark/50 p-1 rounded-full border border-white/5">
+<button class="px-4 py-1.5 rounded-full text-sm font-medium bg-primary text-white shadow-glow">Focus</button>
+<button class="px-4 py-1.5 rounded-full text-sm font-medium text-slate-400 hover:text-white transition-colors">Journal</button>
+<button class="px-4 py-1.5 rounded-full text-sm font-medium text-slate-400 hover:text-white transition-colors">Tasks</button>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-400 hover:text-white transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 size-2 bg-primary rounded-full"></span>
+</button>
+<div class="size-9 rounded-full bg-cover bg-center ring-2 ring-white/10" data-alt="User profile picture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuACfR662P-gKc2qBogGOB85W-o1ZVGDBAW8HRy-oY7UGXrU0cTPTHWlfDs4CtT4MU8hb2ZuWDizV_sghA99V1o8qb-EnwjydgWjZcXr_oRWFcOeG4ccJXrcEa69EZ1PSjfe5hnamrkshwe0hs5XS1zzAdzeGotbrPf3vQgtViblgLvvIRFeoEoDtnqX-m_ubEGihrltvoq9_2w23cgvM8tGMs-UC2GplT28xbEG3eab7KfbQbvWo-gi_1SkOit97gA3eNIkcdaQXNc');"></div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col relative overflow-hidden bg-pattern">
+<!-- Background Ambient Glow -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px] pointer-events-none"></div>
+<!-- Dashboard Grid -->
+<div class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 max-w-[1600px] mx-auto w-full h-full">
+<!-- Left Panel: Visualization & Status -->
+<div class="lg:col-span-8 flex flex-col gap-6 h-full min-h-0">
+<!-- Sound Wave Visualization -->
+<div class="flex-1 relative rounded-2xl bg-surface-dark/40 border border-white/5 backdrop-blur-sm flex items-center justify-center overflow-hidden shadow-glow group">
+<div class="absolute top-6 left-6 flex items-center gap-2">
+<span class="flex size-2 bg-primary rounded-full animate-pulse"></span>
+<span class="text-xs font-medium text-primary/80 uppercase tracking-widest">Aura is listening</span>
+</div>
+<!-- Wave Bars -->
+<div class="flex items-end justify-center gap-1.5 h-32 w-full px-12 opacity-80">
+<div class="w-2 bg-gradient-to-t from-primary/20 to-primary rounded-full wave-bar h-12"></div>
+<div class="w-2 bg-gradient-to-t from-primary/20 to-primary rounded-full wave-bar h-16"></div>
+<div class="w-2 bg-gradient-to-t from-primary/20 to-primary rounded-full wave-bar h-24"></div>
+<div class="w-2 bg-gradient-to-t from-primary/20 to-primary rounded-full wave-bar h-32"></div>
+<div class="w-2 bg-gradient-to-t from-primary/20 to-primary rounded-full wave-bar h-20"></div>
+<div class="w-2 bg-gradient-to-t from-primary/20 to-primary rounded-full wave-bar h-28"></div>
+<div class="w-2 bg-gradient-to-t from-primary/20 to-primary rounded-full wave-bar h-14"></div>
+<div class="w-2 bg-gradient-to-t from-primary/20 to-primary rounded-full wave-bar h-24"></div>
+<div class="w-2 bg-gradient-to-t from-primary/20 to-primary rounded-full wave-bar h-32"></div>
+<div class="w-2 bg-gradient-to-t from-primary/20 to-primary rounded-full wave-bar h-18"></div>
+<div class="w-2 bg-gradient-to-t from-primary/20 to-primary rounded-full wave-bar h-26"></div>
+<div class="w-2 bg-gradient-to-t from-primary/20 to-primary rounded-full wave-bar h-14"></div>
+<div class="w-2 bg-gradient-to-t from-primary/20 to-primary rounded-full wave-bar h-22"></div>
+<div class="w-2 bg-gradient-to-t from-primary/20 to-primary rounded-full wave-bar h-12"></div>
+<div class="w-2 bg-gradient-to-t from-primary/20 to-primary rounded-full wave-bar h-16"></div>
+<div class="w-2 bg-gradient-to-t from-primary/20 to-primary rounded-full wave-bar h-24"></div>
+<div class="w-2 bg-gradient-to-t from-primary/20 to-primary rounded-full wave-bar h-32"></div>
+<div class="w-2 bg-gradient-to-t from-primary/20 to-primary rounded-full wave-bar h-20"></div>
+<div class="w-2 bg-gradient-to-t from-primary/20 to-primary rounded-full wave-bar h-28"></div>
+</div>
+<!-- Quick Presets Overlay (Bottom of Viz) -->
+<div class="absolute bottom-6 w-full flex justify-center px-6">
+<div class="flex flex-wrap justify-center gap-3 bg-black/40 p-2 rounded-2xl backdrop-blur-md border border-white/5">
+<button class="px-4 py-2 rounded-xl text-sm font-medium bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">psychology</span>
+                                Deep Work
+                            </button>
+<button class="px-4 py-2 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">palette</span>
+                                Creative Flow
+                            </button>
+<button class="px-4 py-2 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">self_improvement</span>
+                                Anxiety Reset
+                            </button>
+<button class="px-4 py-2 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">wb_twilight</span>
+                                Gentle Wake-up
+                            </button>
+</div>
+</div>
+</div>
+<!-- Chat Interface -->
+<div class="h-auto min-h-[140px] rounded-2xl bg-surface-dark/60 border border-white/5 backdrop-blur-md flex flex-col p-4 shadow-lg">
+<div class="flex-1 overflow-y-auto scrollbar-hide mb-4 space-y-3 px-2">
+<!-- AI Message -->
+<div class="flex items-start gap-3">
+<div class="size-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[18px]">smart_toy</span>
+</div>
+<div class="bg-white/5 rounded-2xl rounded-tl-none px-4 py-2.5 max-w-[80%]">
+<p class="text-sm text-slate-200">I've adjusted the soundscape for deep focus. Would you like more rain texture?</p>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex items-start gap-3 flex-row-reverse">
+<div class="size-8 rounded-full bg-slate-700 flex items-center justify-center shrink-0">
+<span class="text-xs font-bold text-white">ME</span>
+</div>
+<div class="bg-primary/20 border border-primary/20 rounded-2xl rounded-tr-none px-4 py-2.5 max-w-[80%]">
+<p class="text-sm text-slate-200">Yes please, and lower the bpm slightly.</p>
+</div>
+</div>
+<!-- AI Message -->
+<div class="flex items-start gap-3">
+<div class="size-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[18px]">smart_toy</span>
+</div>
+<div class="bg-white/5 rounded-2xl rounded-tl-none px-4 py-2.5 max-w-[80%]">
+<p class="text-sm text-slate-200">Done. Transitioning to 60 BPM with heavy rain ambiance.</p>
+</div>
+</div>
+</div>
+<!-- Input Area -->
+<div class="relative flex items-center gap-2 bg-black/20 rounded-full p-1.5 pr-2 border border-white/10 focus-within:border-primary/50 transition-colors">
+<button class="size-9 rounded-full hover:bg-white/5 flex items-center justify-center text-slate-400 transition-colors">
+<span class="material-symbols-outlined">mic</span>
+</button>
+<input class="bg-transparent border-none focus:ring-0 text-white placeholder-slate-500 text-sm flex-1 h-9" placeholder="Tell Aura: 'More energy', 'Less bass'..." type="text"/>
+<button class="size-9 rounded-full bg-primary hover:bg-primary/90 flex items-center justify-center text-white shadow-glow transition-all">
+<span class="material-symbols-outlined text-[20px]">send</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Right Panel: Controls & Track Info -->
+<div class="lg:col-span-4 flex flex-col gap-6 h-full min-h-0">
+<!-- Track Info Card -->
+<div class="relative overflow-hidden rounded-2xl bg-[#1e1915] border border-white/5 p-6 group">
+<div class="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex items-start justify-between mb-6 relative z-10">
+<div class="flex flex-col">
+<span class="text-xs font-medium text-primary uppercase tracking-wider mb-1">Now Playing</span>
+<h3 class="text-xl font-bold text-white leading-tight">Rainy Night in Tokyo</h3>
+<p class="text-sm text-slate-400 mt-1">Lofi Fruits Music</p>
+</div>
+<div class="size-12 rounded-xl overflow-hidden shadow-lg rotate-3 group-hover:rotate-0 transition-transform duration-500">
+<div class="w-full h-full bg-cover bg-center" data-alt="Abstract lofi album art" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAUY_znGsAvh7psh4rvMldTIlqxwGpq7UCFOiyRnWg9PexOAlCj4OFVXsTIhOSQ9Fj_fxSKqYLPTbW9dhswmfohu06lrAyK2pucH0HNgwgte705kE9CjrjxNkGHj-FdRZQU9qrVju2LDM1vIqTOr1-rwcrc62keo9PdtKQgIi6n5owtCzaU9xPCSQ6qcvuHw2HzfFCzWIz5h-41k8-UM2BkD4u8qe62LEkqgjgnj3nxa_jA39uIZArzCif75KaVkxRLusFUeZkyYb8');"></div>
+</div>
+</div>
+<div class="flex items-center gap-4 relative z-10">
+<div class="flex flex-col gap-1">
+<span class="text-[10px] text-slate-500 font-bold uppercase">Tempo</span>
+<span class="text-lg font-bold text-slate-200 font-mono">60 <span class="text-xs text-slate-500 font-sans font-normal">BPM</span></span>
+</div>
+<div class="w-px h-8 bg-white/10"></div>
+<div class="flex flex-col gap-1">
+<span class="text-[10px] text-slate-500 font-bold uppercase">Focus Score</span>
+<span class="text-lg font-bold text-primary font-mono">92%</span>
+</div>
+<div class="ml-auto flex items-center gap-1.5 bg-[#1DB954]/10 px-2.5 py-1 rounded-full border border-[#1DB954]/20">
+<img alt="Spotify" class="w-4 h-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrFBAwFNbesRWAlMDy9WlqT7XmtaHAVP0GF8E9k7W_dDuZu2LfCAhfvJW6k8hdtai5-srsNTxAObv3N0g5EsLQP8BGn-rq2VjyxSvZNRxCmuTEEGAA-BOGZoqOQ4u1vK0MuCPYLHopKTUDNuSM9swRazd3EREUq-JKN9wWqnXnT-kAdpfmiiUOxt_9RVTJKBmVKwzl1g2EISMI6G-dMrRfiujRuGsOucp2j8EyavHUanBtFLo1sUg5OIZccb5z6-hlRHsxYPnp73M"/>
+<span class="text-[10px] font-bold text-[#1DB954]">Linked</span>
+</div>
+</div>
+<!-- Progress Bar -->
+<div class="mt-6 relative z-10">
+<div class="flex justify-between text-[10px] text-slate-500 font-medium mb-2">
+<span>1:42</span>
+<span>3:15</span>
+</div>
+<div class="h-1 bg-white/10 rounded-full overflow-hidden">
+<div class="h-full w-[45%] bg-primary rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Vibe Controls -->
+<div class="flex-1 rounded-2xl bg-surface-dark/40 border border-white/5 p-6 flex flex-col justify-center gap-8">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-[20px]">tune</span>
+<h3 class="text-base font-bold text-white">Vibe Mix</h3>
+</div>
+<!-- Slider 1 -->
+<div class="space-y-3">
+<div class="flex justify-between items-center text-sm">
+<span class="text-slate-300 font-medium flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-500 text-[18px]">water_drop</span>
+                                Ambient Rain
+                            </span>
+<span class="text-primary font-mono text-xs">80%</span>
+</div>
+<input class="accent-primary" max="100" min="0" type="range" value="80"/>
+</div>
+<!-- Slider 2 -->
+<div class="space-y-3">
+<div class="flex justify-between items-center text-sm">
+<span class="text-slate-300 font-medium flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-500 text-[18px]">album</span>
+                                Vinyl Crackle
+                            </span>
+<span class="text-primary font-mono text-xs">45%</span>
+</div>
+<input class="accent-primary" max="100" min="0" type="range" value="45"/>
+</div>
+<!-- Slider 3 -->
+<div class="space-y-3">
+<div class="flex justify-between items-center text-sm">
+<span class="text-slate-300 font-medium flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-500 text-[18px]">coffee</span>
+                                Cafe Chatter
+                            </span>
+<span class="text-slate-500 font-mono text-xs">12%</span>
+</div>
+<input class="accent-primary opacity-60 hover:opacity-100 transition-opacity" max="100" min="0" type="range" value="12"/>
+</div>
+<!-- Slider 4 -->
+<div class="space-y-3">
+<div class="flex justify-between items-center text-sm">
+<span class="text-slate-300 font-medium flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-500 text-[18px]">speaker</span>
+                                Bass Depth
+                            </span>
+<span class="text-primary font-mono text-xs">60%</span>
+</div>
+<input class="accent-primary" max="100" min="0" type="range" value="60"/>
+</div>
+</div>
+<!-- Playback Controls (Mini) -->
+<div class="flex justify-between items-center bg-[#18120d] border border-white/5 rounded-2xl p-4">
+<button class="text-slate-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined">shuffle</span>
+</button>
+<button class="text-slate-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[28px]">skip_previous</span>
+</button>
+<button class="size-12 bg-primary text-white rounded-full flex items-center justify-center shadow-glow hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[28px] fill-current">pause</span>
+</button>
+<button class="text-slate-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[28px]">skip_next</span>
+</button>
+<button class="text-slate-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined">repeat</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

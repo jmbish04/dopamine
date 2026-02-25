@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Active Focus Mode - The Onion Tasker</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0dccf2",
+                        "primary-dark": "#0ab8da",
+                        "primary-light": "#e0f9fd",
+                        "background-light": "#f5f8f8",
+                        "background-dark": "#101f22",
+                        "surface-dark": "#162a2f",
+                        "surface-dark-lighter": "#1c353b",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                    boxShadow: {
+                        'glow': '0 0 20px rgba(13, 204, 242, 0.5)',
+                        'glow-lg': '0 0 40px rgba(13, 204, 242, 0.3)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .timer-circle {
+            transition: stroke-dashoffset 1s linear;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen text-slate-900 dark:text-slate-100 flex flex-col font-display overflow-hidden relative">
+<!-- Ambient Background Glow -->
+<div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px]"></div>
+</div>
+<!-- Top Navigation / Dopamine Header -->
+<header class="relative z-10 w-full px-6 py-4 flex items-center justify-between border-b border-surface-dark-lighter bg-background-dark/80 backdrop-blur-sm">
+<div class="flex items-center gap-3">
+<div class="size-8 text-primary">
+<svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_6_319)">
+<path d="M8.57829 8.57829C5.52816 11.6284 3.451 15.5145 2.60947 19.7452C1.76794 23.9758 2.19984 28.361 3.85056 32.3462C5.50128 36.3314 8.29667 39.7376 11.8832 42.134C15.4698 44.5305 19.6865 45.8096 24 45.8096C28.3135 45.8096 32.5302 44.5305 36.1168 42.134C39.7033 39.7375 42.4987 36.3314 44.1494 32.3462C45.8002 28.361 46.2321 23.9758 45.3905 19.7452C44.549 15.5145 42.4718 11.6284 39.4217 8.57829L24 24L8.57829 8.57829Z" fill="currentColor"></path>
+</g>
+<defs>
+<clippath id="clip0_6_319"><rect fill="white" height="48" width="48"></rect></clippath>
+</defs>
+</svg>
+</div>
+<h2 class="text-slate-100 text-lg font-bold tracking-tight hidden sm:block">The Onion Tasker</h2>
+</div>
+<div class="flex items-center gap-4">
+<div class="bg-surface-dark-lighter border border-surface-dark-lighter/50 rounded-full px-4 py-1.5 flex items-center gap-2">
+<span class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Current Goal:</span>
+<span class="text-primary text-sm font-bold">Deep Work Session</span>
+</div>
+<div class="flex items-center gap-2 text-primary font-bold bg-primary/10 px-3 py-1.5 rounded-full border border-primary/20">
+<span class="material-symbols-outlined text-[20px]">local_fire_department</span>
+<span class="text-sm">4 Day Streak</span>
+</div>
+</div>
+<div class="size-10 rounded-full bg-surface-dark-lighter border border-surface-dark-lighter overflow-hidden" data-alt="User profile avatar placeholder" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB-9RspI4C4Byfov3V_kPtrzFTeuXn6puBhEefC-fiwRTC66Iin5OKFxmO3dRnU1yU2deYl56h2wWZeIlh9eYhwaUMjA0BHqvMrPegPpV958kwmmdzsFHIi0-R7bgqD4Xwl6zzFPsysKZzLB_kr0_x1cdFYiSMyWFeZt8OY_JWXSrG6M3OvRDRwBz5I1TysVZ1kY7DvBFBuAiA9yxtsBK_sVgQsRE6JYGlxxmaCkCrm0auKteQQZNePygYVDpcPhqtt9O2jEJdkJBM'); background-size: cover; background-position: center;">
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="relative z-10 flex-1 flex flex-col items-center justify-center p-6 w-full max-w-5xl mx-auto h-full min-h-[600px]">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 w-full items-center">
+<!-- Left Column: The Timer -->
+<div class="flex flex-col items-center justify-center order-2 lg:order-1">
+<div class="relative size-[320px] sm:size-[400px]">
+<!-- Outer Glow Ring -->
+<div class="absolute inset-0 rounded-full shadow-glow-lg opacity-50 animate-pulse"></div>
+<svg class="w-full h-full -rotate-90 transform" viewbox="0 0 256 256">
+<!-- Track -->
+<circle cx="128" cy="128" fill="none" r="110" stroke="#1c353b" stroke-width="8"></circle>
+<!-- Progress -->
+<circle class="timer-circle drop-shadow-[0_0_10px_rgba(13,204,242,0.6)]" cx="128" cy="128" fill="none" r="110" stroke="#0dccf2" stroke-dasharray="691" stroke-dashoffset="150" stroke-linecap="round" stroke-width="12"></circle>
+</svg>
+<!-- Time Text -->
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-7xl sm:text-8xl font-black text-slate-100 tracking-tighter drop-shadow-md">
+                            45:00
+                        </span>
+<span class="text-primary font-medium tracking-widest uppercase mt-2 text-sm sm:text-base">Focus Time</span>
+</div>
+</div>
+</div>
+<!-- Right Column: Focus Card -->
+<div class="flex flex-col justify-center order-1 lg:order-2 w-full">
+<div class="bg-surface-dark/60 backdrop-blur-md border border-surface-dark-lighter rounded-xl p-8 shadow-xl relative overflow-hidden group">
+<!-- Decorative top border gradient -->
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-70"></div>
+<div class="mb-2 flex justify-between items-start">
+<span class="text-xs font-bold tracking-widest text-slate-400 uppercase">Current Focus</span>
+<button class="text-slate-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+</div>
+<h1 class="text-3xl sm:text-4xl font-extrabold text-white leading-tight mb-3">
+                        Draft the Executive Summary
+                    </h1>
+<p class="text-slate-400 text-lg mb-8 leading-relaxed">
+                        Don't overthink the intro, just bullet points for now. Focus on the Q3 metrics.
+                    </p>
+<!-- Minimal Deliverable Pill -->
+<div class="bg-primary/5 border border-primary/20 rounded-lg p-4 flex items-start gap-3 mb-2">
+<span class="material-symbols-outlined text-primary mt-0.5">check_circle</span>
+<div>
+<p class="text-xs uppercase tracking-wider text-primary font-bold mb-1">Minimal Deliverable</p>
+<p class="text-slate-200 font-medium">1-page Google Doc link shared in Slack.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Controls Dock -->
+<footer class="relative z-20 pb-8 px-6 pt-4 flex justify-center w-full">
+<div class="bg-surface-dark border border-surface-dark-lighter rounded-2xl p-2 px-6 flex items-center gap-6 shadow-2xl backdrop-blur-lg">
+<!-- Stop Button -->
+<button class="group flex flex-col items-center gap-1 min-w-[64px] text-slate-400 hover:text-red-400 transition-colors py-2">
+<div class="size-10 rounded-full bg-surface-dark-lighter group-hover:bg-red-500/10 flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined filled text-2xl">stop</span>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-wide">Stop</span>
+</button>
+<!-- Pause Button -->
+<button class="group flex flex-col items-center gap-1 min-w-[64px] text-slate-400 hover:text-slate-100 transition-colors py-2">
+<div class="size-10 rounded-full bg-surface-dark-lighter group-hover:bg-slate-700 flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined filled text-2xl">pause</span>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-wide">Pause</span>
+</button>
+<!-- Divider -->
+<div class="w-px h-10 bg-surface-dark-lighter mx-2"></div>
+<!-- Complete Button (Primary) -->
+<button class="group relative flex items-center gap-3 bg-primary hover:bg-primary-dark text-background-dark font-bold text-lg rounded-xl pl-5 pr-6 h-14 shadow-[0_0_20px_rgba(13,204,242,0.3)] hover:shadow-[0_0_30px_rgba(13,204,242,0.5)] transition-all transform hover:-translate-y-1 active:translate-y-0 overflow-hidden">
+<!-- Button Shine Effect -->
+<div class="absolute top-0 -left-[100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 group-hover:animate-[shimmer_1s_infinite]"></div>
+<span class="material-symbols-outlined text-2xl">check</span>
+<span>Mark Complete</span>
+</button>
+</div>
+</footer>
+<!-- Custom Keyframe for Shimmer -->
+<style>
+        @keyframes shimmer {
+            100% {
+                left: 200%;
+            }
+        }
+    </style>
+</body></html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Neural Flow - End of Day Reflection</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f27f0d",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#221910",
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Spline Sans', sans-serif;
+        }
+        .chart-gradient {
+            background: linear-gradient(180deg, rgba(242, 127, 13, 0.2) 0%, rgba(34, 25, 16, 0) 100%);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<!-- Header / Navigation -->
+<header class="flex items-center justify-between mb-12 border-b border-primary/10 pb-6">
+<div class="flex items-center gap-3">
+<div class="size-10 bg-primary rounded-lg flex items-center justify-center text-background-dark">
+<span class="material-symbols-outlined font-bold">insights</span>
+</div>
+<h2 class="text-xl font-bold tracking-tight">Neural Flow</h2>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="size-10 rounded-full border-2 border-primary/30 p-0.5">
+<img alt="User Avatar" class="rounded-full w-full h-full object-cover" data-alt="Portrait of a person smiling gently" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUPj8YYHGcNGOdkYOHYtTD32YunOUm1dex9zds7dIXfu7Q2uZ6BUxlXrzIQFzlaHtPHbW5Kz2P5PlrEBbTdwYpoWkT2AdgGlmBsXjOPhA97Y9elwtgfLAkvJktX0zQzWKBUlFdUWtTHOEp-U8YSSYkORjjaQRWnQBA2wXv8Hv6Rz-l43Q_qdY_XMhI3tDzLzbgpGlHAJaAnVl-LPJzWJvl1kXHm73cT-NApY4Nqap-Dt_TCiwsogGJZ82tH5HeXkHOitDNcP_BAIU"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Title & Battery -->
+<div class="lg:col-span-8 space-y-8">
+<section>
+<h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight mb-2 text-slate-900 dark:text-slate-50">
+                        Good Evening, Alex.
+                    </h1>
+<p class="text-lg text-slate-600 dark:text-primary/70">
+                        Tuesday, October 24th • Your cognitive cycle is winding down.
+                    </p>
+</section>
+<!-- Brain Battery Recap Card -->
+<div class="bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/20 rounded-xl p-6 shadow-sm">
+<div class="flex items-center justify-between mb-6">
+<div>
+<h3 class="text-lg font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">battery_charging_80</span>
+                                Brain Battery Recap
+                            </h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">Cognitive energy levels today</p>
+</div>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-primary/20 text-primary text-xs font-bold rounded-full border border-primary/30 uppercase tracking-wider">72% Avg</span>
+</div>
+</div>
+<!-- Simplified Chart Representation -->
+<div class="relative h-64 w-full mt-8">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 800 200">
+<!-- Area Gradient -->
+<defs>
+<lineargradient id="batteryGrad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#f27f0d" stop-opacity="0.3"></stop>
+<stop offset="100%" stop-color="#f27f0d" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,150 C100,50 200,30 300,80 C400,130 500,40 600,60 C700,80 800,160 800,160 L800,200 L0,200 Z" fill="url(#batteryGrad)"></path>
+<!-- Line -->
+<path d="M0,150 C100,50 200,30 300,80 C400,130 500,40 600,60 C700,80 800,160 800,160" fill="none" stroke="#f27f0d" stroke-linecap="round" stroke-width="4"></path>
+<!-- Key Markers -->
+<circle cx="230" cy="45" fill="#f27f0d" r="6"></circle>
+<circle cx="550" cy="45" fill="#f27f0d" r="6"></circle>
+</svg>
+<!-- Labels -->
+<div class="absolute top-4 left-[20%] bg-primary text-background-dark px-2 py-1 rounded text-[10px] font-bold uppercase">Hyperfocus</div>
+<div class="absolute bottom-12 right-[10%] bg-slate-500 text-white px-2 py-1 rounded text-[10px] font-bold uppercase">Low Energy</div>
+<div class="flex justify-between mt-4 text-xs font-medium text-slate-500 dark:text-slate-400">
+<span>8:00 AM</span>
+<span>12:00 PM</span>
+<span>4:00 PM</span>
+<span>8:00 PM</span>
+<span>11:00 PM</span>
+</div>
+</div>
+</div>
+<!-- XP Breakdown -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/20 rounded-xl p-6">
+<h4 class="text-sm font-bold uppercase tracking-widest text-primary mb-4">Task Contribution</h4>
+<div class="space-y-4">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between text-sm mb-1">
+<span class="font-medium">Deep Work</span>
+<span class="text-primary font-bold">+450 XP</span>
+</div>
+<div class="w-full bg-slate-200 dark:bg-primary/10 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[70%] rounded-full"></div>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between text-sm mb-1">
+<span class="font-medium">Quick Wins</span>
+<span class="text-primary font-bold">+120 XP</span>
+</div>
+<div class="w-full bg-slate-200 dark:bg-primary/10 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[30%] rounded-full"></div>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between text-sm mb-1">
+<span class="font-medium">Routine Flow</span>
+<span class="text-primary font-bold">+80 XP</span>
+</div>
+<div class="w-full bg-slate-200 dark:bg-primary/10 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[20%] rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Mood Selection -->
+<div class="bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/20 rounded-xl p-6">
+<h4 class="text-sm font-bold uppercase tracking-widest text-primary mb-4">Current State</h4>
+<div class="grid grid-cols-3 gap-3">
+<button class="flex flex-col items-center gap-2 p-3 rounded-lg border border-slate-200 dark:border-primary/10 hover:border-primary transition-all bg-background-light dark:bg-background-dark/50">
+<span class="text-2xl">😌</span>
+<span class="text-[10px] font-bold uppercase">Satisfied</span>
+</button>
+<button class="flex flex-col items-center gap-2 p-3 rounded-lg border border-primary bg-primary/10 shadow-[0_0_15px_rgba(242,127,13,0.2)]">
+<span class="text-2xl">🧠</span>
+<span class="text-[10px] font-bold uppercase text-primary">Still Wired</span>
+</button>
+<button class="flex flex-col items-center gap-2 p-3 rounded-lg border border-slate-200 dark:border-primary/10 hover:border-primary transition-all bg-background-light dark:bg-background-dark/50">
+<span class="text-2xl">🔋</span>
+<span class="text-[10px] font-bold uppercase">Burned Out</span>
+</button>
+</div>
+<div class="mt-4">
+<input class="w-full bg-transparent border-b border-primary/20 focus:border-primary focus:ring-0 text-sm py-2" placeholder="One word for today..." type="text"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: XP Summary & Tomorrow -->
+<div class="lg:col-span-4 space-y-8">
+<!-- Dopamine XP Summary Card -->
+<div class="bg-primary rounded-xl p-8 text-background-dark shadow-xl relative overflow-hidden group">
+<div class="absolute -right-8 -top-8 size-32 bg-background-dark/10 rounded-full blur-2xl group-hover:bg-background-dark/20 transition-all"></div>
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined font-bold">bolt</span>
+<span class="text-sm font-bold uppercase tracking-widest opacity-80">Daily Total</span>
+</div>
+<div class="text-6xl font-black mb-4 tracking-tighter">650 <span class="text-2xl opacity-70">XP</span></div>
+<div class="flex items-center gap-2 bg-background-dark/10 p-3 rounded-lg border border-background-dark/10">
+<div class="size-2 rounded-full bg-background-dark"></div>
+<p class="text-xs font-bold">New Level Reached: <span class="underline">Flow Master II</span></p>
+</div>
+</div>
+</div>
+<!-- Tomorrow's Outlook -->
+<div class="bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/20 rounded-xl p-6">
+<h3 class="text-lg font-bold flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">bedtime</span>
+                        Tomorrow's Outlook
+                    </h3>
+<div class="space-y-4">
+<div class="p-4 bg-background-light dark:bg-background-dark rounded-lg border-l-4 border-primary">
+<p class="text-sm leading-relaxed">
+                                Based on today's <span class="text-primary font-bold">Hyperfocus</span> at 2 PM, we expect a peak readiness window tomorrow around <span class="text-primary font-bold">10:30 AM</span>.
+                            </p>
+</div>
+<div class="flex items-center justify-between py-2 border-b border-primary/10">
+<span class="text-sm text-slate-500">Sleep Goal</span>
+<span class="text-sm font-bold">7.5 Hours</span>
+</div>
+<div class="flex items-center justify-between py-2 border-b border-primary/10">
+<span class="text-sm text-slate-500">Projected Battery</span>
+<span class="text-sm font-bold text-green-500">92%</span>
+</div>
+</div>
+</div>
+<!-- Done for Today Button -->
+<button class="w-full py-6 rounded-xl bg-slate-900 dark:bg-slate-100 text-slate-100 dark:text-slate-900 font-bold text-lg flex items-center justify-center gap-3 hover:scale-[1.02] transition-transform active:scale-95 shadow-lg shadow-black/20">
+<span class="material-symbols-outlined">nights_stay</span>
+                    Done for Today
+                </button>
+<p class="text-center text-xs text-slate-500 dark:text-primary/40 italic">
+                    Switching to night mode will dim the interface and silence non-critical notifications.
+                </p>
+</div>
+</main>
+<!-- Footer / Tips -->
+<footer class="mt-16 pt-8 border-t border-primary/10">
+<div class="bg-primary/5 rounded-xl p-4 flex flex-col sm:flex-row items-center gap-4 border border-primary/10">
+<div class="size-12 rounded-full bg-primary/20 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined">lightbulb</span>
+</div>
+<div class="text-center sm:text-left">
+<h5 class="text-sm font-bold uppercase tracking-wider text-primary">Cognitive Tip</h5>
+<p class="text-sm text-slate-600 dark:text-slate-300">Your brain battery drops faster when multitasking. Tomorrow, try one-hour sprints for your Deep Work blocks.</p>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Email Task Review Modal - The Onion Tasker</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d59f2",
+                        "primary-foreground": "#ffffff",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#09090b", // Zinc-950 for deep dark
+                        "card": "#18181b", // Zinc-900
+                        "card-foreground": "#fafafa",
+                        "muted": "#27272a", // Zinc-800
+                        "muted-foreground": "#a1a1aa", // Zinc-400
+                        "accent": "#27272a",
+                        "accent-foreground": "#fafafa",
+                        "border": "#27272a",
+                        "input": "#27272a",
+                        "ring": "#0d59f2",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "sans": ["Space Grotesk", "sans-serif"],
+                    },
+                    borderRadius: {
+                        "lg": "0.5rem",
+                        "md": "calc(0.5rem - 2px)",
+                        "sm": "calc(0.5rem - 4px)",
+                    },
+                    boxShadow: {
+                        'glow': '0 0 20px -5px rgba(13, 89, 242, 0.5)',
+                        'glow-sm': '0 0 10px -2px rgba(13, 89, 242, 0.3)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom Scrollbar for that dev-tool feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #09090b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3f3f46;
+        }
+
+        /* Animation utilities */
+        .animate-in {
+            animation: animate-in 0.2s ease-out;
+        }
+        @keyframes animate-in {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Glass morphism background for modal overlay */
+        .bg-glass {
+            background-color: rgba(9, 9, 11, 0.8);
+            backdrop-filter: blur(4px);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display antialiased min-h-screen flex items-center justify-center p-4">
+<!-- Modal Overlay -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-glass animate-in p-4 sm:p-6">
+<!-- Modal Content -->
+<div class="relative w-full max-w-2xl flex flex-col gap-0 rounded-xl border border-border bg-background-dark shadow-2xl overflow-hidden max-h-[90vh]">
+<!-- Header -->
+<div class="flex items-center justify-between border-b border-border px-6 py-4 bg-card/50">
+<div class="flex items-center gap-3">
+<div class="relative flex items-center justify-center h-10 w-10 rounded-md bg-muted/50 border border-border/50 shadow-glow-sm">
+<span class="material-symbols-outlined text-primary" style="font-size: 24px;">mail</span>
+<span class="absolute top-0 right-0 -mt-1 -mr-1 flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
+</span>
+</div>
+<div>
+<h2 class="text-lg font-bold leading-none tracking-tight text-white">AI Task Extraction</h2>
+<p class="text-sm text-muted-foreground mt-1">Reviewing 5 suggested tasks from Gmail</p>
+</div>
+</div>
+<button class="rounded-md p-2 hover:bg-accent hover:text-white transition-colors text-muted-foreground">
+<span class="material-symbols-outlined" style="font-size: 20px;">close</span>
+</button>
+</div>
+<!-- Scrollable Body -->
+<div class="flex-1 overflow-y-auto p-6 space-y-4 bg-background-dark">
+<!-- Task Item 1 -->
+<div class="group relative flex flex-col gap-3 rounded-lg border border-border bg-card p-4 transition-all hover:border-primary/50 hover:shadow-glow-sm">
+<div class="flex items-start justify-between gap-4">
+<div class="space-y-1.5">
+<div class="flex items-center gap-2">
+<h3 class="font-semibold text-white text-base">Update Q3 Financial Report</h3>
+<span class="inline-flex items-center rounded-md border border-primary/30 bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+<span class="material-symbols-outlined mr-1" style="font-size: 12px;">auto_awesome</span>
+                                    98% Match
+                                </span>
+<span class="inline-flex items-center rounded-md border border-red-900/50 bg-red-900/20 px-2 py-0.5 text-xs font-medium text-red-400">
+                                    High Priority
+                                </span>
+</div>
+<p class="text-sm text-muted-foreground line-clamp-2 border-l-2 border-border pl-3 italic">
+                                "From: Boss - 'Hey, can you make sure the Q3 numbers are in by Friday? We need to review them before the board meeting...'"
+                            </p>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-2 text-xs text-muted-foreground">
+<span class="material-symbols-outlined" style="font-size: 14px;">calendar_today</span>
+<span>Due: Friday</span>
+</div>
+<div class="flex items-center gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+<button class="inline-flex h-8 items-center justify-center rounded-md border border-border bg-transparent px-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-red-900/20 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:ring-offset-0">
+<span class="material-symbols-outlined mr-1" style="font-size: 16px;">close</span>
+                                Dismiss
+                            </button>
+<button class="inline-flex h-8 items-center justify-center rounded-md bg-primary px-3 text-xs font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background-dark">
+<span class="material-symbols-outlined mr-1" style="font-size: 16px;">add_task</span>
+                                Add to Inbox
+                            </button>
+</div>
+</div>
+</div>
+<!-- Task Item 2 -->
+<div class="group relative flex flex-col gap-3 rounded-lg border border-border bg-card p-4 transition-all hover:border-primary/50 hover:shadow-glow-sm">
+<div class="flex items-start justify-between gap-4">
+<div class="space-y-1.5">
+<div class="flex items-center gap-2">
+<h3 class="font-semibold text-white text-base">Schedule Dentist Appointment</h3>
+<span class="inline-flex items-center rounded-md border border-primary/30 bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+<span class="material-symbols-outlined mr-1" style="font-size: 12px;">auto_awesome</span>
+                                    85% Match
+                                </span>
+<span class="inline-flex items-center rounded-md border border-blue-900/50 bg-blue-900/20 px-2 py-0.5 text-xs font-medium text-blue-400">
+                                    Low Priority
+                                </span>
+</div>
+<p class="text-sm text-muted-foreground line-clamp-2 border-l-2 border-border pl-3 italic">
+                                "From: Dental Care - 'Reminder for your check-up. Please call us to schedule your bi-annual cleaning...'"
+                            </p>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-2 text-xs text-muted-foreground">
+<span class="material-symbols-outlined" style="font-size: 14px;">schedule</span>
+<span>Est: 15m</span>
+</div>
+<div class="flex items-center gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+<button class="inline-flex h-8 items-center justify-center rounded-md border border-border bg-transparent px-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-red-900/20 hover:text-red-400">
+<span class="material-symbols-outlined mr-1" style="font-size: 16px;">close</span>
+                                Dismiss
+                            </button>
+<button class="inline-flex h-8 items-center justify-center rounded-md bg-primary px-3 text-xs font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90">
+<span class="material-symbols-outlined mr-1" style="font-size: 16px;">add_task</span>
+                                Add to Inbox
+                            </button>
+</div>
+</div>
+</div>
+<!-- Task Item 3 -->
+<div class="group relative flex flex-col gap-3 rounded-lg border border-border bg-card p-4 transition-all hover:border-primary/50 hover:shadow-glow-sm">
+<div class="flex items-start justify-between gap-4">
+<div class="space-y-1.5">
+<div class="flex items-center gap-2">
+<h3 class="font-semibold text-white text-base">Review PR #402</h3>
+<span class="inline-flex items-center rounded-md border border-primary/30 bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+<span class="material-symbols-outlined mr-1" style="font-size: 12px;">auto_awesome</span>
+                                    92% Match
+                                </span>
+<span class="inline-flex items-center rounded-md border border-yellow-900/50 bg-yellow-900/20 px-2 py-0.5 text-xs font-medium text-yellow-400">
+                                    Medium Priority
+                                </span>
+</div>
+<p class="text-sm text-muted-foreground line-clamp-2 border-l-2 border-border pl-3 italic">
+                                "From: GitHub - 'dependabot opened a new pull request: Bump actions/checkout from 3 to 4...'"
+                            </p>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-2 text-xs text-muted-foreground">
+<span class="material-symbols-outlined" style="font-size: 14px;">code</span>
+<span>Context: Dev</span>
+</div>
+<div class="flex items-center gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+<button class="inline-flex h-8 items-center justify-center rounded-md border border-border bg-transparent px-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-red-900/20 hover:text-red-400">
+<span class="material-symbols-outlined mr-1" style="font-size: 16px;">close</span>
+                                Dismiss
+                            </button>
+<button class="inline-flex h-8 items-center justify-center rounded-md bg-primary px-3 text-xs font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90">
+<span class="material-symbols-outlined mr-1" style="font-size: 16px;">add_task</span>
+                                Add to Inbox
+                            </button>
+</div>
+</div>
+</div>
+<!-- Task Item 4 -->
+<div class="group relative flex flex-col gap-3 rounded-lg border border-border bg-card p-4 transition-all hover:border-primary/50 hover:shadow-glow-sm">
+<div class="flex items-start justify-between gap-4">
+<div class="space-y-1.5">
+<div class="flex items-center gap-2">
+<h3 class="font-semibold text-white text-base">Book Flights for Conf</h3>
+<span class="inline-flex items-center rounded-md border border-primary/30 bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+<span class="material-symbols-outlined mr-1" style="font-size: 12px;">auto_awesome</span>
+                                    88% Match
+                                </span>
+<span class="inline-flex items-center rounded-md border border-red-900/50 bg-red-900/20 px-2 py-0.5 text-xs font-medium text-red-400">
+                                    High Priority
+                                </span>
+</div>
+<p class="text-sm text-muted-foreground line-clamp-2 border-l-2 border-border pl-3 italic">
+                                "From: TripActions - 'Your flight request has been approved. Please finalize booking by end of day...'"
+                            </p>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-2 text-xs text-muted-foreground">
+<span class="material-symbols-outlined" style="font-size: 14px;">flight</span>
+<span>Due: Today</span>
+</div>
+<div class="flex items-center gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+<button class="inline-flex h-8 items-center justify-center rounded-md border border-border bg-transparent px-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-red-900/20 hover:text-red-400">
+<span class="material-symbols-outlined mr-1" style="font-size: 16px;">close</span>
+                                Dismiss
+                            </button>
+<button class="inline-flex h-8 items-center justify-center rounded-md bg-primary px-3 text-xs font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90">
+<span class="material-symbols-outlined mr-1" style="font-size: 16px;">add_task</span>
+                                Add to Inbox
+                            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<div class="flex items-center justify-between border-t border-border bg-card/50 px-6 py-4">
+<div class="flex items-center gap-2 text-sm text-muted-foreground">
+<span class="material-symbols-outlined text-primary animate-spin" style="font-size: 18px;">sync</span>
+<span>Monitoring Inbox...</span>
+</div>
+<div class="flex gap-3">
+<button class="inline-flex items-center justify-center rounded-md border border-border bg-transparent px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+                        Dismiss All
+                    </button>
+<button class="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background-dark">
+<span class="material-symbols-outlined mr-2" style="font-size: 18px;">done_all</span>
+                        Process All (4)
+                    </button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

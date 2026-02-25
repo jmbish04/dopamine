@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Onion Tasker Dashboard</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Noto+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d59f2",
+                        "primary-foreground": "#ffffff",
+                        "background": "#09090b", // Deep dark background
+                        "surface": "#18181b", // Slightly lighter for cards
+                        "surface-hover": "#27272a",
+                        "border": "#27272a",
+                        "muted": "#a1a1aa",
+                        "muted-foreground": "#71717a",
+                        "accent": "#0d59f2",
+                        "success": "#22c55e",
+                        "warning": "#eab308",
+                        "danger": "#ef4444",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.375rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'glow': '0 0 20px -5px rgba(13, 89, 242, 0.3)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom Scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #09090b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3f3f46;
+        }
+
+        /* Subtle animation for the sparkle button */
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px -3px rgba(13, 89, 242, 0.4); }
+            50% { box-shadow: 0 0 25px -3px rgba(13, 89, 242, 0.7); }
+        }
+        .animate-pulse-glow {
+            animation: pulse-glow 3s infinite;
+        }
+    </style>
+</head>
+<body class="bg-background text-slate-100 font-body min-h-screen flex flex-col overflow-x-hidden selection:bg-primary selection:text-white">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+<div class="container mx-auto px-4 h-16 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="flex items-center justify-center size-8 rounded-lg bg-primary/20 text-primary">
+<span class="material-symbols-outlined text-[20px]">layers</span>
+</div>
+<h1 class="font-display font-bold text-xl tracking-tight text-white">The Onion Tasker</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="relative p-2 rounded-lg hover:bg-surface text-muted hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-primary rounded-full"></span>
+</button>
+<button class="p-2 rounded-lg hover:bg-surface text-muted hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+</button>
+<div class="h-8 w-[1px] bg-border mx-1"></div>
+<div class="flex items-center gap-3 pl-1">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-medium text-white">Alex Dev</p>
+<p class="text-xs text-muted-foreground">Pro Plan</p>
+</div>
+<div class="size-9 rounded-full bg-surface border border-border overflow-hidden" data-alt="User profile picture placeholder">
+<img alt="User Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpybdEiAqh052rlMYMAf5w9YLRuTdxFvgEz1ek9qKKl-AjGyl4BpAEgaDVH5RsiHPqUGqPYa2zPejooxYIFmmkBJ0r4CZBEHBHnsc0g7C62aUMaDp1IMt_SSgIRI-P9HbPVOctg4xRzGKHehNtbj_-IXNxB3kAY24zQEbucktS3v1LozOOIv64oZlaMJ9tuJrmH2BrepJTIlS3E34GNLjQkzS3Sg01Ie55OLdbRCtFjaDzl6VZUAOTDi033KTNI0ZUeUlErpAdMtY"/>
+</div>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 container mx-auto px-4 py-8 max-w-7xl">
+<!-- Brain Dump Section -->
+<section class="mb-12 relative group">
+<div class="absolute -inset-1 bg-gradient-to-r from-primary/20 to-purple-500/20 rounded-2xl blur-xl opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+<div class="relative bg-surface rounded-xl border border-border p-1 shadow-2xl">
+<div class="flex flex-col md:flex-row h-[280px]">
+<div class="flex-1 relative">
+<textarea class="w-full h-full bg-transparent border-0 text-lg md:text-xl text-slate-200 placeholder:text-muted-foreground/50 p-6 resize-none focus:ring-0 font-display leading-relaxed" placeholder="Dump your chaos here... (e.g., 'Buy milk, email Sarah about the project, and fix the leaky tap')"></textarea>
+<div class="absolute bottom-4 left-6 text-xs text-muted-foreground font-mono bg-background/50 px-2 py-1 rounded">
+                            CMD + ENTER to process
+                        </div>
+</div>
+<div class="md:w-64 border-t md:border-t-0 md:border-l border-border bg-surface/50 p-4 flex flex-col justify-end gap-3">
+<div class="flex-1 flex flex-col items-center justify-center text-center p-4 text-muted-foreground">
+<span class="material-symbols-outlined text-4xl mb-2 opacity-50">psychology</span>
+<p class="text-sm">AI ready to organize your thoughts</p>
+</div>
+<button class="w-full h-12 bg-primary hover:bg-primary/90 text-white font-display font-bold rounded-lg flex items-center justify-center gap-2 shadow-glow animate-pulse-glow transition-all transform active:scale-95">
+<span class="material-symbols-outlined text-[20px]">auto_awesome</span>
+                            Peel the Onion
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Stats / Quick Filters -->
+<div class="flex flex-wrap gap-4 mb-8">
+<button class="px-4 py-2 rounded-full bg-surface border border-border text-sm font-medium text-white hover:border-primary/50 transition-colors flex items-center gap-2">
+<span class="size-2 rounded-full bg-primary"></span>
+                All Tasks
+                <span class="ml-1 text-muted-foreground">12</span>
+</button>
+<button class="px-4 py-2 rounded-full bg-transparent border border-border text-sm font-medium text-muted hover:text-white hover:border-muted-foreground transition-colors flex items-center gap-2">
+<span class="size-2 rounded-full bg-danger"></span>
+                High Energy
+                <span class="ml-1 text-muted-foreground">4</span>
+</button>
+<button class="px-4 py-2 rounded-full bg-transparent border border-border text-sm font-medium text-muted hover:text-white hover:border-muted-foreground transition-colors flex items-center gap-2">
+<span class="size-2 rounded-full bg-success"></span>
+                Quick Wins
+                <span class="ml-1 text-muted-foreground">3</span>
+</button>
+</div>
+<!-- Task Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Column: Life Admin -->
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between px-1">
+<h2 class="text-lg font-display font-bold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-purple-400">home_work</span>
+                        Life Admin
+                    </h2>
+<span class="text-xs font-mono text-muted-foreground bg-surface px-2 py-1 rounded">3 tasks</span>
+</div>
+<!-- Card 1 -->
+<div class="group relative bg-surface hover:bg-surface-hover border border-border hover:border-border/80 rounded-lg p-4 transition-all duration-200 cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<div class="flex flex-col gap-1">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-red-500/10 text-red-400 border border-red-500/20 w-fit">
+                                High Priority
+                            </span>
+<h3 class="font-medium text-slate-100 leading-tight">Call Insurance Company</h3>
+</div>
+<button class="text-muted-foreground hover:text-success transition-colors p-1 rounded-md hover:bg-success/10 group/btn" title="Mark Complete">
+<span class="material-symbols-outlined group-hover/btn:fill-1">check_circle</span>
+</button>
+</div>
+<div class="flex items-center justify-between mt-4 pt-3 border-t border-border/50">
+<div class="flex items-center gap-1.5 text-xs text-muted-foreground">
+<span class="material-symbols-outlined text-[14px] text-yellow-500">bolt</span>
+                            High Energy
+                        </div>
+<div class="text-[10px] text-muted-foreground font-mono">Today</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group relative bg-surface hover:bg-surface-hover border border-border hover:border-border/80 rounded-lg p-4 transition-all duration-200 cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<div class="flex flex-col gap-1">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20 w-fit">
+                                Medium Priority
+                            </span>
+<h3 class="font-medium text-slate-100 leading-tight">Book Dentist Appointment</h3>
+</div>
+<button class="text-muted-foreground hover:text-success transition-colors p-1 rounded-md hover:bg-success/10 group/btn" title="Mark Complete">
+<span class="material-symbols-outlined group-hover/btn:fill-1">check_circle</span>
+</button>
+</div>
+<div class="flex items-center justify-between mt-4 pt-3 border-t border-border/50">
+<div class="flex items-center gap-1.5 text-xs text-muted-foreground">
+<span class="material-symbols-outlined text-[14px] text-green-500">battery_low</span>
+                            Low Energy
+                        </div>
+<div class="text-[10px] text-muted-foreground font-mono">Tomorrow</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group relative bg-surface hover:bg-surface-hover border border-border hover:border-border/80 rounded-lg p-4 transition-all duration-200 cursor-pointer opacity-60 hover:opacity-100">
+<div class="flex justify-between items-start mb-3">
+<div class="flex flex-col gap-1">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-slate-500/10 text-slate-400 border border-slate-500/20 w-fit">
+                                Low Priority
+                            </span>
+<h3 class="font-medium text-slate-100 leading-tight">Research vacuum cleaners</h3>
+</div>
+<button class="text-muted-foreground hover:text-success transition-colors p-1 rounded-md hover:bg-success/10 group/btn" title="Mark Complete">
+<span class="material-symbols-outlined group-hover/btn:fill-1">check_circle</span>
+</button>
+</div>
+<div class="flex items-center justify-between mt-4 pt-3 border-t border-border/50">
+<div class="flex items-center gap-1.5 text-xs text-muted-foreground">
+<span class="material-symbols-outlined text-[14px] text-yellow-500">bolt</span>
+                            Medium Energy
+                        </div>
+<div class="text-[10px] text-muted-foreground font-mono">Next Week</div>
+</div>
+</div>
+</div>
+<!-- Column: Work -->
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between px-1">
+<h2 class="text-lg font-display font-bold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-400">terminal</span>
+                        Work
+                    </h2>
+<span class="text-xs font-mono text-muted-foreground bg-surface px-2 py-1 rounded">2 tasks</span>
+</div>
+<!-- Card 1 -->
+<div class="group relative bg-surface hover:bg-surface-hover border border-border hover:border-border/80 rounded-lg p-4 transition-all duration-200 cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<div class="flex flex-col gap-1">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-red-500/10 text-red-400 border border-red-500/20 w-fit">
+                                High Priority
+                            </span>
+<h3 class="font-medium text-slate-100 leading-tight">Refactor Auth Middleware</h3>
+</div>
+<button class="text-muted-foreground hover:text-success transition-colors p-1 rounded-md hover:bg-success/10 group/btn" title="Mark Complete">
+<span class="material-symbols-outlined group-hover/btn:fill-1">check_circle</span>
+</button>
+</div>
+<div class="flex items-center justify-between mt-4 pt-3 border-t border-border/50">
+<div class="flex items-center gap-1.5 text-xs text-muted-foreground">
+<span class="material-symbols-outlined text-[14px] text-yellow-500">bolt</span>
+                            High Energy
+                        </div>
+<div class="text-[10px] text-muted-foreground font-mono">Overdue</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group relative bg-surface hover:bg-surface-hover border border-border hover:border-border/80 rounded-lg p-4 transition-all duration-200 cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<div class="flex flex-col gap-1">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20 w-fit">
+                                Medium Priority
+                            </span>
+<h3 class="font-medium text-slate-100 leading-tight">Review PR #402</h3>
+</div>
+<button class="text-muted-foreground hover:text-success transition-colors p-1 rounded-md hover:bg-success/10 group/btn" title="Mark Complete">
+<span class="material-symbols-outlined group-hover/btn:fill-1">check_circle</span>
+</button>
+</div>
+<div class="flex items-center justify-between mt-4 pt-3 border-t border-border/50">
+<div class="flex items-center gap-1.5 text-xs text-muted-foreground">
+<span class="material-symbols-outlined text-[14px] text-yellow-500">bolt</span>
+                            Medium Energy
+                        </div>
+<div class="text-[10px] text-muted-foreground font-mono">Today</div>
+</div>
+</div>
+</div>
+<!-- Column: Personal -->
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between px-1">
+<h2 class="text-lg font-display font-bold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-green-400">spa</span>
+                        Personal
+                    </h2>
+<span class="text-xs font-mono text-muted-foreground bg-surface px-2 py-1 rounded">2 tasks</span>
+</div>
+<!-- Card 1 -->
+<div class="group relative bg-surface hover:bg-surface-hover border border-border hover:border-border/80 rounded-lg p-4 transition-all duration-200 cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<div class="flex flex-col gap-1">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-slate-500/10 text-slate-400 border border-slate-500/20 w-fit">
+                                Low Priority
+                            </span>
+<h3 class="font-medium text-slate-100 leading-tight">Water Plants</h3>
+</div>
+<button class="text-muted-foreground hover:text-success transition-colors p-1 rounded-md hover:bg-success/10 group/btn" title="Mark Complete">
+<span class="material-symbols-outlined group-hover/btn:fill-1">check_circle</span>
+</button>
+</div>
+<div class="flex items-center justify-between mt-4 pt-3 border-t border-border/50">
+<div class="flex items-center gap-1.5 text-xs text-muted-foreground">
+<span class="material-symbols-outlined text-[14px] text-green-500">battery_low</span>
+                            Low Energy
+                        </div>
+<div class="text-[10px] text-muted-foreground font-mono">Weekly</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group relative bg-surface hover:bg-surface-hover border border-border hover:border-border/80 rounded-lg p-4 transition-all duration-200 cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<div class="flex flex-col gap-1">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-slate-500/10 text-slate-400 border border-slate-500/20 w-fit">
+                                Low Priority
+                            </span>
+<h3 class="font-medium text-slate-100 leading-tight">Order Dog Food</h3>
+</div>
+<button class="text-muted-foreground hover:text-success transition-colors p-1 rounded-md hover:bg-success/10 group/btn" title="Mark Complete">
+<span class="material-symbols-outlined group-hover/btn:fill-1">check_circle</span>
+</button>
+</div>
+<div class="flex items-center justify-between mt-4 pt-3 border-t border-border/50">
+<div class="flex items-center gap-1.5 text-xs text-muted-foreground">
+<span class="material-symbols-outlined text-[14px] text-yellow-500">bolt</span>
+                            Quick Win
+                        </div>
+<div class="text-[10px] text-muted-foreground font-mono">Today</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Spacer -->
+<div class="h-20"></div>
+</main>
+<!-- Modal / Dialog Overlay -->
+<!-- This is a "simulated" open state for visual representation in the design -->
+<div class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+<div class="bg-surface border border-border rounded-xl w-full max-w-md shadow-2xl relative overflow-hidden">
+<!-- Modal Header -->
+<div class="px-6 py-4 border-b border-border flex items-center justify-between bg-surface-hover/30">
+<h3 class="font-display font-bold text-lg text-white">Edit Task</h3>
+<button class="text-muted-foreground hover:text-white">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Modal Content -->
+<div class="p-6 space-y-4">
+<div class="space-y-2">
+<label class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Task Name</label>
+<input class="w-full bg-background border border-border rounded-lg px-3 py-2 text-white focus:ring-1 focus:ring-primary focus:border-primary" type="text" value="Call Insurance Company"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Priority</label>
+<div class="relative">
+<select class="w-full bg-background border border-border rounded-lg px-3 py-2 text-white appearance-none focus:ring-1 focus:ring-primary focus:border-primary">
+<option>High</option>
+<option>Medium</option>
+<option>Low</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-muted-foreground pointer-events-none text-[20px]">expand_more</span>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Energy</label>
+<div class="relative">
+<select class="w-full bg-background border border-border rounded-lg px-3 py-2 text-white appearance-none focus:ring-1 focus:ring-primary focus:border-primary">
+<option>High ⚡️</option>
+<option>Medium 🧠</option>
+<option>Low 🌿</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-muted-foreground pointer-events-none text-[20px]">expand_more</span>
+</div>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Project</label>
+<div class="flex flex-wrap gap-2">
+<button class="px-3 py-1 rounded-full bg-primary/20 text-primary border border-primary/30 text-xs font-medium">Life Admin</button>
+<button class="px-3 py-1 rounded-full bg-surface border border-border text-muted-foreground hover:text-white text-xs font-medium">Work</button>
+<button class="px-3 py-1 rounded-full bg-surface border border-border text-muted-foreground hover:text-white text-xs font-medium">Personal</button>
+</div>
+</div>
+</div>
+<!-- Modal Footer -->
+<div class="px-6 py-4 bg-surface-hover/30 border-t border-border flex justify-end gap-3">
+<button class="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-white">Delete</button>
+<button class="px-4 py-2 rounded-lg bg-primary hover:bg-primary/90 text-white text-sm font-bold shadow-lg shadow-primary/20">Save Changes</button>
+</div>
+</div>
+</div>
+</body></html>
