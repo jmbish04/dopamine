@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Neural Flow - Dopamine XP Rewards Store</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f27f0d",
+                        "primary-glow": "rgba(242, 127, 13, 0.4)",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#1a1510",
+                        "card-dark": "#2a221b",
+                        "card-hover": "#352b22",
+                        "success": "#22c55e",
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "sans-serif"]
+                    },
+                    boxShadow: {
+                        "neon": "0 0 20px -5px rgba(242, 127, 13, 0.4)",
+                        "neon-hover": "0 0 30px -5px rgba(242, 127, 13, 0.6)",
+                        "inner-glow": "inset 0 0 20px rgba(242, 127, 13, 0.1)",
+                    },
+                    animation: {
+                        'pulse-glow': 'pulse-glow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        'pulse-glow': {
+                            '0%, 100%': { textShadow: '0 0 10px rgba(242, 127, 13, 0.5), 0 0 20px rgba(242, 127, 13, 0.3)' },
+                            '50%': { textShadow: '0 0 20px rgba(242, 127, 13, 0.8), 0 0 30px rgba(242, 127, 13, 0.5)' },
+                        }
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for better aesthetic */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1510;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #352b22;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f27f0d;
+        }
+
+        /* Masonry Grid Setup */
+        .masonry-grid {
+            column-count: 1;
+            column-gap: 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .masonry-grid {
+                column-count: 2;
+            }
+        }
+        @media (min-width: 1280px) {
+            .masonry-grid {
+                column-count: 3;
+            }
+        }
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col overflow-x-hidden selection:bg-primary selection:text-white">
+<!-- Top Navigation -->
+<div class="w-full border-b border-white/5 bg-background-dark/95 backdrop-blur-md sticky top-0 z-50">
+<div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+<header class="flex items-center justify-between h-16">
+<!-- Logo -->
+<div class="flex items-center gap-3 text-white">
+<div class="size-8 bg-primary/20 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">neurology</span>
+</div>
+<h2 class="text-white text-lg font-bold tracking-tight">Neural Flow</h2>
+</div>
+<!-- Right Actions -->
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center gap-2 bg-card-dark px-3 py-1.5 rounded-full border border-white/5">
+<span class="material-symbols-outlined text-primary text-[18px]">local_fire_department</span>
+<span class="text-sm font-bold text-white">Streak: 12 Days</span>
+</div>
+<button class="relative p-2 text-slate-400 hover:text-primary transition-colors rounded-full hover:bg-white/5">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-primary rounded-full animate-ping"></span>
+<span class="absolute top-2 right-2 size-2 bg-primary rounded-full"></span>
+</button>
+<div class="size-9 rounded-full bg-gradient-to-br from-primary to-orange-700 p-[2px]">
+<div class="size-full rounded-full bg-card-dark flex items-center justify-center overflow-hidden">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="Close up portrait of a young woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZPqy4UUISVtdd6w6CFEg_n5qAMIs_obGxx846mlHt4Hcr8mKa6ap-kYcc8fhc_gR-fJw4fIWzMthaQJX9B6KiJbG7Djzqqr9vHpkaq3LEybE2r_JLozSQyxKkOPBikZC807_RWRnbzyCY8Jik8eM5EimCLUo8p5WTZtfBdnGADy0pmHZEH-UPbWZdBIV7SYuYgVjxL-e9Sl7je06fnLsMIiRf3pvbzLKjEfG02CgTwZ9wLD-tZKWdtlnIsYie-H8S_b1WpljWM5g"/>
+</div>
+</div>
+</div>
+</header>
+</div>
+</div>
+<!-- Main Content Layout -->
+<div class="flex-1 flex flex-col lg:flex-row max-w-[1400px] mx-auto w-full">
+<!-- Main Rewards Area -->
+<main class="flex-1 p-4 sm:p-6 lg:p-8 flex flex-col gap-8">
+<!-- XP Header Balance -->
+<section class="relative overflow-hidden rounded-3xl bg-gradient-to-b from-card-dark to-background-dark border border-white/5 p-8 sm:p-12 text-center shadow-inner-glow">
+<div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
+<div class="relative z-10 flex flex-col items-center justify-center gap-2">
+<h1 class="text-6xl sm:text-8xl font-black text-primary tracking-tighter animate-pulse-glow drop-shadow-xl">
+                        1,250 <span class="text-4xl sm:text-5xl align-top opacity-80">XP</span>
+</h1>
+<div class="flex items-center gap-2 mt-2 px-4 py-2 bg-primary/10 rounded-full border border-primary/20">
+<span class="material-symbols-outlined text-primary">bolt</span>
+<p class="text-primary font-medium">Level 14: Dopamine Hunter</p>
+</div>
+<p class="text-slate-400 mt-4 max-w-md mx-auto">
+                        You're on fire today! Spend your hard-earned focus points on something that sparks joy.
+                    </p>
+</div>
+<!-- Background ambient glow -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/20 blur-[100px] rounded-full pointer-events-none"></div>
+</section>
+<!-- Filters -->
+<section class="flex flex-wrap gap-3 sticky top-20 z-40 py-2 bg-background-dark/80 backdrop-blur-sm -mx-2 px-2">
+<button class="px-5 py-2.5 rounded-full bg-primary text-white font-bold text-sm shadow-neon hover:shadow-neon-hover transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">grid_view</span>
+                    All Rewards
+                </button>
+<button class="px-5 py-2.5 rounded-full bg-card-dark hover:bg-card-hover border border-white/5 text-slate-300 font-medium text-sm transition-all flex items-center gap-2 group">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">timer</span>
+                    Quick Refuel (5-10m)
+                </button>
+<button class="px-5 py-2.5 rounded-full bg-card-dark hover:bg-card-hover border border-white/5 text-slate-300 font-medium text-sm transition-all flex items-center gap-2 group">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">self_improvement</span>
+                    Sensory Reset (15-30m)
+                </button>
+<button class="px-5 py-2.5 rounded-full bg-card-dark hover:bg-card-hover border border-white/5 text-slate-300 font-medium text-sm transition-all flex items-center gap-2 group">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">trophy</span>
+                    Long Term Wins
+                </button>
+</section>
+<!-- Masonry Grid of Rewards -->
+<section class="masonry-grid w-full">
+<!-- Card 1: Quick Refuel -->
+<div class="masonry-item group relative overflow-hidden rounded-3xl bg-card-dark hover:bg-card-hover border border-white/5 hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-neon">
+<div class="absolute top-0 right-0 p-4 opacity-50">
+<span class="material-symbols-outlined text-4xl text-slate-600 group-hover:text-primary transition-colors">music_note</span>
+</div>
+<div class="p-6 flex flex-col gap-4">
+<div class="w-12 h-12 rounded-2xl bg-blue-500/20 text-blue-400 flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl">headphones</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-white mb-1">5-Min Dance Party</h3>
+<p class="text-sm text-slate-400">Shake off the stiffness. Pick your favorite high-bpm track.</p>
+</div>
+<div class="flex items-center justify-between mt-2 pt-4 border-t border-white/5">
+<span class="text-lg font-bold text-primary">100 XP</span>
+<button class="px-4 py-2 bg-primary/10 hover:bg-primary hover:text-white text-primary rounded-xl font-bold text-sm transition-all flex items-center gap-2 group/btn">
+                                Redeem
+                                <span class="material-symbols-outlined text-[18px] group-hover/btn:rotate-12 transition-transform">shopping_bag</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 2: Sensory Reset -->
+<div class="masonry-item group relative overflow-hidden rounded-3xl bg-card-dark hover:bg-card-hover border border-white/5 hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-neon">
+<div class="h-32 w-full overflow-hidden">
+<img alt="Forest walk path" class="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity" data-alt="Peaceful forest path with sunlight filtering through trees" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRk-YYNj8IIEgU8YCF9h_DkaMto5QKf4qDYKUx-vLlNOaHByWyIC1LcCebhr9M-TwgaZ8dayUrh_mZKDtzYXsOOolq3EUkiyvWZSZo9hrlI4smOZuOp-zXcHyl8PQpur8SFJKJO2z8ZpUd78VH0sFXMrPakoT6bcXHIeI3PF7W_yf07GGIhElXXYWhPnDNPYjxkLJRUHgJSAFdS1Epq0cVlFTkeM0F-LM6Lg6ReEQq0P-nrSiI33Hmw-eIjvgHTYty8yzOJvUJ85c"/>
+</div>
+<div class="p-6 flex flex-col gap-4 -mt-4 bg-card-dark rounded-t-3xl relative z-10">
+<div class="flex justify-between items-start">
+<div>
+<span class="text-xs font-bold uppercase tracking-wider text-green-400 mb-1 block">Nature Fix</span>
+<h3 class="text-xl font-bold text-white mb-1">15-Min Power Walk</h3>
+</div>
+</div>
+<p class="text-sm text-slate-400">Step outside, look at the horizon, and breathe real air.</p>
+<div class="flex items-center justify-between mt-2">
+<span class="text-lg font-bold text-primary">300 XP</span>
+<button class="px-4 py-2 bg-primary/10 hover:bg-primary hover:text-white text-primary rounded-xl font-bold text-sm transition-all flex items-center gap-2 group/btn">
+                                Redeem
+                                <span class="material-symbols-outlined text-[18px] group-hover/btn:rotate-12 transition-transform">shopping_bag</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 3: Long Term Win (Locked) -->
+<div class="masonry-item group relative overflow-hidden rounded-3xl bg-card-dark/50 border border-white/5 transition-all duration-300">
+<div class="absolute inset-0 bg-black/40 z-20 flex flex-col items-center justify-center backdrop-blur-[2px]">
+<span class="material-symbols-outlined text-4xl text-slate-500 mb-2">lock</span>
+<span class="text-sm font-bold text-slate-400">Need 2,000 XP</span>
+</div>
+<div class="p-6 flex flex-col gap-4 opacity-50 grayscale">
+<div class="w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl">palette</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-white mb-1">Custom UI Theme</h3>
+<p class="text-sm text-slate-400">Unlock the 'Cyberpunk Neon' color scheme for the dashboard.</p>
+</div>
+<div class="flex items-center justify-between mt-2 pt-4 border-t border-white/5">
+<span class="text-lg font-bold text-slate-500">2,000 XP</span>
+<button class="px-4 py-2 bg-slate-800 text-slate-500 rounded-xl font-bold text-sm cursor-not-allowed">
+                                Locked
+                            </button>
+</div>
+</div>
+</div>
+<!-- Card 4: Quick Refuel -->
+<div class="masonry-item group relative overflow-hidden rounded-3xl bg-card-dark hover:bg-card-hover border border-white/5 hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-neon">
+<div class="p-6 flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div class="w-12 h-12 rounded-2xl bg-teal-500/20 text-teal-400 flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl">water_drop</span>
+</div>
+<span class="px-2 py-1 bg-white/5 rounded text-xs text-slate-400 font-mono">5 MIN</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-white mb-1">Hydration Station</h3>
+<p class="text-sm text-slate-400">Go fill your bottle with ice cold water. Chug half now.</p>
+</div>
+<div class="flex items-center justify-between mt-2 pt-4 border-t border-white/5">
+<span class="text-lg font-bold text-primary">50 XP</span>
+<button class="px-4 py-2 bg-primary/10 hover:bg-primary hover:text-white text-primary rounded-xl font-bold text-sm transition-all flex items-center gap-2 group/btn">
+                                Redeem
+                                <span class="material-symbols-outlined text-[18px] group-hover/btn:rotate-12 transition-transform">shopping_bag</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 5: Sensory Reset -->
+<div class="masonry-item group relative overflow-hidden rounded-3xl bg-card-dark hover:bg-card-hover border border-white/5 hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-neon">
+<div class="absolute top-0 right-0 w-24 h-24 bg-rose-500/10 blur-2xl rounded-full -mr-10 -mt-10"></div>
+<div class="p-6 flex flex-col gap-4">
+<div class="w-12 h-12 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl">chair</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-white mb-1">Floor Time</h3>
+<p class="text-sm text-slate-400">Lay on the floor. Do nothing. Just exist horizontally for 10 minutes.</p>
+</div>
+<div class="flex items-center justify-between mt-2 pt-4 border-t border-white/5">
+<span class="text-lg font-bold text-primary">150 XP</span>
+<button class="px-4 py-2 bg-primary/10 hover:bg-primary hover:text-white text-primary rounded-xl font-bold text-sm transition-all flex items-center gap-2 group/btn">
+                                Redeem
+                                <span class="material-symbols-outlined text-[18px] group-hover/btn:rotate-12 transition-transform">shopping_bag</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 6: Long Term Win -->
+<div class="masonry-item group relative overflow-hidden rounded-3xl bg-card-dark hover:bg-card-hover border border-white/5 hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-neon">
+<div class="h-32 w-full overflow-hidden bg-gradient-to-r from-amber-500 to-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-6xl text-white drop-shadow-lg">military_tech</span>
+</div>
+<div class="p-6 flex flex-col gap-4 -mt-4 bg-card-dark rounded-t-3xl relative z-10">
+<div>
+<h3 class="text-xl font-bold text-white mb-1">Gold Streak Badge</h3>
+<p class="text-sm text-slate-400">Show off your consistency with a permanent profile badge.</p>
+</div>
+<div class="flex items-center justify-between mt-2">
+<span class="text-lg font-bold text-primary">1,200 XP</span>
+<button class="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-xl font-bold text-sm transition-all flex items-center gap-2 shadow-neon hover:shadow-neon-hover">
+                                Redeem Now
+                                <span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Sidebar: Recent History -->
+<aside class="w-full lg:w-80 bg-[#16120e] border-t lg:border-t-0 lg:border-l border-white/5 flex flex-col shrink-0">
+<div class="p-6 lg:sticky lg:top-20">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-bold text-white">Recent History</h3>
+<span class="text-xs text-slate-500 font-medium bg-white/5 px-2 py-1 rounded">Today</span>
+</div>
+<!-- Timeline Feed -->
+<div class="flex flex-col gap-6 relative">
+<!-- Vertical Line -->
+<div class="absolute left-[19px] top-2 bottom-2 w-[2px] bg-white/5 z-0"></div>
+<!-- Item 1 -->
+<div class="flex gap-4 relative z-10">
+<div class="size-10 rounded-full bg-green-500/10 border border-green-500/20 text-green-500 flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(34,197,94,0.2)]">
+<span class="material-symbols-outlined text-[20px]">check</span>
+</div>
+<div class="flex flex-col pt-1">
+<p class="text-sm font-medium text-slate-200">Completed: Weekly Review</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="text-xs font-bold text-green-400">+150 XP</span>
+<span class="size-1 bg-slate-600 rounded-full"></span>
+<span class="text-xs text-slate-500">10m ago</span>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex gap-4 relative z-10">
+<div class="size-10 rounded-full bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+</div>
+<div class="flex flex-col pt-1">
+<p class="text-sm font-medium text-slate-200">Redeemed: Coffee Break</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="text-xs font-bold text-primary">-100 XP</span>
+<span class="size-1 bg-slate-600 rounded-full"></span>
+<span class="text-xs text-slate-500">1h ago</span>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="flex gap-4 relative z-10">
+<div class="size-10 rounded-full bg-green-500/10 border border-green-500/20 text-green-500 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">check</span>
+</div>
+<div class="flex flex-col pt-1">
+<p class="text-sm font-medium text-slate-200">Completed: Email Sprint</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="text-xs font-bold text-green-400">+50 XP</span>
+<span class="size-1 bg-slate-600 rounded-full"></span>
+<span class="text-xs text-slate-500">2h ago</span>
+</div>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="flex gap-4 relative z-10">
+<div class="size-10 rounded-full bg-green-500/10 border border-green-500/20 text-green-500 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">check</span>
+</div>
+<div class="flex flex-col pt-1">
+<p class="text-sm font-medium text-slate-200">Completed: Project Setup</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="text-xs font-bold text-green-400">+200 XP</span>
+<span class="size-1 bg-slate-600 rounded-full"></span>
+<span class="text-xs text-slate-500">3h ago</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Daily Summary Box -->
+<div class="mt-10 p-4 bg-card-dark rounded-2xl border border-white/5">
+<p class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-3">Daily Earnings</p>
+<div class="w-full h-3 bg-background-dark rounded-full overflow-hidden mb-2">
+<div class="h-full bg-gradient-to-r from-primary to-orange-400 w-[75%] rounded-full shadow-[0_0_10px_rgba(242,127,13,0.4)]"></div>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-white font-medium">400 / 600 XP</span>
+<span class="text-primary font-bold">75%</span>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</body></html>

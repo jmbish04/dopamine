@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Task Decomposer - Neural Flow</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f27f0d",
+                        "primary-dark": "#c26307",
+                        "primary-light": "#ff9f4d",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#231a10",
+                        "surface-dark": "#2f2418",
+                        "surface-lighter": "#493622",
+                        "accent-teal": "#2a9d8f",
+                        "text-main": "#e7e5e4",
+                        "text-muted": "#a8a29e"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "2xl": "2rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for better aesthetics in dark mode */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #231a10;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #493622;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #684d31;
+        }
+
+        /* Timeline line styling */
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 27px; /* Adjust based on icon size/padding */
+            top: 50px;
+            bottom: -30px;
+            width: 2px;
+            background-color: #493622;
+            z-index: 0;
+        }
+        .timeline-item:last-child .timeline-line::before {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-text-main font-display min-h-screen flex flex-col overflow-hidden">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-surface-lighter dark:bg-background-dark px-6 py-3 z-20">
+<div class="flex items-center gap-4">
+<div class="size-8 text-primary">
+<span class="material-symbols-outlined text-3xl">neurology</span>
+</div>
+<h2 class="text-xl font-bold leading-tight tracking-tight">Neural Flow</h2>
+</div>
+<div class="flex gap-3">
+<div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-dark border border-surface-lighter">
+<span class="material-symbols-outlined text-primary text-sm">bolt</span>
+<span class="text-xs font-bold text-primary">LVL 12</span>
+<span class="w-px h-4 bg-surface-lighter mx-1"></span>
+<span class="text-xs text-text-muted">1,240 XP</span>
+</div>
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-surface-lighter transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="flex size-10 items-center justify-center overflow-hidden rounded-full border border-surface-lighter">
+<img alt="User Profile Avatar" class="size-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIRyyf_lqg-Onjgy8oAMoTsEXAq8ybuRf_Xl7QHPoZ9kUlygj_CQGfVtm1KsCR59uV7k22xZfnF4Jpb4nXAosRbTFtrjWLkm7Jb34rtgfRfgWAxog21ZgLR_qWct4v8l98xBhYVBYH2gbQQzMNYwfI7gV7oMDR1t5vxxy-oyEACpKSIi4qORvcNm-05Wg9HONBpdWGD16cb1fNFrgNCvL_7KrNduY0r8QQxuM6vZcs2A35vtpU0SOhFKbj7ROZ5HiGk2iAdLrliIc"/>
+</button>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- Sidebar Navigation & Progress Tree -->
+<aside class="hidden lg:flex w-72 flex-col border-r border-surface-lighter bg-background-dark overflow-y-auto">
+<div class="p-4 flex flex-col gap-6">
+<!-- Navigation -->
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-muted hover:bg-surface-dark hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-lighter text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-primary">account_tree</span>
+<span class="text-sm font-medium">Task Decomposer</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-muted hover:bg-surface-dark hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">timer</span>
+<span class="text-sm font-medium">Focus Timer</span>
+</a>
+</nav>
+<hr class="border-surface-lighter"/>
+<!-- Progress Tree Visualization -->
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h3 class="text-xs font-bold uppercase tracking-wider text-text-muted">Current Goal Structure</h3>
+<button class="text-primary hover:text-primary-light">
+<span class="material-symbols-outlined text-sm">edit</span>
+</button>
+</div>
+<div class="relative pl-2">
+<!-- Tree Connector Lines -->
+<div class="absolute top-3 left-[19px] bottom-6 w-0.5 bg-surface-lighter"></div>
+<!-- Root Goal -->
+<div class="relative flex items-start gap-3 mb-6">
+<div class="relative z-10 flex items-center justify-center size-8 rounded-full bg-primary/20 border-2 border-primary shrink-0">
+<span class="material-symbols-outlined text-primary text-sm">flag</span>
+</div>
+<div class="flex flex-col pt-1">
+<span class="text-sm font-semibold text-white">Project Proposal</span>
+<span class="text-xs text-text-muted">Due Tomorrow</span>
+</div>
+</div>
+<!-- Branches -->
+<div class="relative flex items-center gap-3 mb-4">
+<div class="absolute left-[19px] -translate-x-1/2 w-4 h-0.5 bg-surface-lighter"></div>
+<div class="ml-6 relative z-10 flex items-center justify-center size-2 rounded-full bg-green-500 shrink-0"></div>
+<span class="text-xs text-text-muted line-through">Research Competitors</span>
+</div>
+<div class="relative flex items-center gap-3 mb-4">
+<div class="absolute left-[19px] -translate-x-1/2 w-4 h-0.5 bg-surface-lighter"></div>
+<div class="ml-6 relative z-10 flex items-center justify-center size-2 rounded-full bg-primary shrink-0 ring-4 ring-primary/20"></div>
+<span class="text-xs font-medium text-primary">Draft Outline</span>
+</div>
+<div class="relative flex items-center gap-3">
+<div class="absolute left-[19px] -translate-x-1/2 w-4 h-0.5 bg-surface-lighter"></div>
+<div class="ml-6 relative z-10 flex items-center justify-center size-2 rounded-full bg-surface-lighter shrink-0"></div>
+<span class="text-xs text-text-muted">Final Review</span>
+</div>
+</div>
+</div>
+<!-- Daily XP Widget -->
+<div class="mt-auto bg-surface-dark rounded-xl p-4 border border-surface-lighter">
+<div class="flex justify-between items-end mb-2">
+<span class="text-xs font-bold text-text-muted">Daily Momentum</span>
+<span class="text-lg font-bold text-primary">85%</span>
+</div>
+<div class="w-full bg-surface-lighter rounded-full h-2">
+<div class="bg-primary h-2 rounded-full" style="width: 85%"></div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col relative overflow-hidden">
+<!-- Input Header -->
+<div class="p-6 md:p-10 pb-4">
+<div class="max-w-3xl mx-auto w-full">
+<label class="block mb-2 text-sm font-medium text-text-muted">What is the mission?</label>
+<div class="relative group">
+<div class="absolute inset-0 bg-primary/20 blur-xl rounded-2xl opacity-0 group-focus-within:opacity-50 transition-opacity duration-500"></div>
+<div class="relative flex items-center bg-surface-dark border border-surface-lighter rounded-2xl shadow-lg overflow-hidden focus-within:ring-2 focus-within:ring-primary/50 transition-all">
+<textarea class="flex-1 bg-transparent border-none text-lg md:text-xl text-white placeholder-text-muted focus:ring-0 py-4 px-5 resize-none" placeholder="Break down 'Write Project Proposal' into tiny steps..." rows="1"></textarea>
+<div class="pr-3 pl-2 py-2">
+<button class="flex items-center gap-2 bg-primary hover:bg-primary-dark text-white text-sm font-bold px-4 py-2.5 rounded-xl transition-all shadow-[0_0_15px_rgba(242,127,13,0.3)] hover:shadow-[0_0_20px_rgba(242,127,13,0.5)]">
+<span class="material-symbols-outlined text-lg">colors_spark</span>
+<span class="hidden sm:inline">Gemini Decompose</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Quick Filters/AI Suggestions -->
+<div class="flex gap-2 mt-4 overflow-x-auto pb-2 scrollbar-hide">
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-dark border border-surface-lighter text-xs font-medium text-text-muted hover:text-white hover:border-primary/50 transition-colors whitespace-nowrap">
+<span class="material-symbols-outlined text-sm">timer</span>
+                            Make steps smaller (2m)
+                        </button>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-dark border border-surface-lighter text-xs font-medium text-text-muted hover:text-white hover:border-primary/50 transition-colors whitespace-nowrap">
+<span class="material-symbols-outlined text-sm">sentiment_very_dissatisfied</span>
+                            This looks boring
+                        </button>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-dark border border-surface-lighter text-xs font-medium text-text-muted hover:text-white hover:border-primary/50 transition-colors whitespace-nowrap">
+<span class="material-symbols-outlined text-sm">priority_high</span>
+                            Add urgency
+                        </button>
+</div>
+</div>
+</div>
+<!-- Timeline Content -->
+<div class="flex-1 overflow-y-auto px-6 md:px-10 pb-20">
+<div class="max-w-3xl mx-auto w-full pt-4">
+<!-- Step 1: Completed -->
+<div class="timeline-item relative flex gap-6 pb-8 group">
+<div class="timeline-line flex flex-col items-center">
+<div class="size-14 rounded-2xl bg-surface-dark border-2 border-green-500/50 flex items-center justify-center shrink-0 z-10 shadow-lg">
+<span class="material-symbols-outlined text-green-500 text-2xl">check_circle</span>
+</div>
+</div>
+<div class="flex-1 opacity-60">
+<div class="bg-surface-dark border border-surface-lighter rounded-xl p-5 flex flex-col md:flex-row gap-4 items-start md:items-center">
+<div class="flex-1">
+<h4 class="text-lg font-bold text-white line-through decoration-text-muted">Open Laptop Lid</h4>
+<p class="text-sm text-text-muted mt-1">First step is always the hardest. You did it!</p>
+</div>
+<div class="flex items-center gap-3">
+<span class="px-2.5 py-1 rounded-md bg-green-500/10 text-green-500 text-xs font-bold">+10 XP</span>
+<span class="px-2.5 py-1 rounded-md bg-surface-lighter text-text-muted text-xs font-medium">30s</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 2: Active -->
+<div class="timeline-item relative flex gap-6 pb-8 group">
+<div class="timeline-line flex flex-col items-center">
+<div class="relative size-14 rounded-2xl bg-primary flex items-center justify-center shrink-0 z-10 shadow-[0_0_20px_rgba(242,127,13,0.4)]">
+<span class="material-symbols-outlined text-white text-3xl animate-pulse">play_arrow</span>
+<div class="absolute -inset-1 rounded-2xl border border-primary/50"></div>
+</div>
+</div>
+<div class="flex-1">
+<div class="bg-surface-dark border border-primary/30 rounded-xl p-5 shadow-lg relative overflow-hidden group-hover:border-primary/50 transition-colors">
+<!-- Active Indicator Strip -->
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-primary"></div>
+<div class="flex flex-col md:flex-row gap-4 items-start justify-between">
+<div class="flex-1">
+<div class="flex items-center gap-3 mb-2">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-accent-teal/20 text-accent-teal border border-accent-teal/30">Interest</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-surface-lighter text-text-muted">Atomic Step</span>
+</div>
+<h4 class="text-xl font-bold text-white mb-1">Open Document &amp; Name It</h4>
+<p class="text-sm text-text-muted">Just create the file. Naming it "Project_v1" is enough.</p>
+</div>
+<div class="flex flex-row md:flex-col items-center md:items-end gap-3 shrink-0 w-full md:w-auto justify-between md:justify-start mt-2 md:mt-0">
+<div class="flex items-center gap-2">
+<div class="flex items-center gap-1 text-primary font-bold bg-primary/10 px-3 py-1.5 rounded-lg border border-primary/20">
+<span class="material-symbols-outlined text-sm">bolt</span>
+<span>+20 XP</span>
+</div>
+<div class="flex items-center gap-1 text-text-main bg-surface-lighter px-3 py-1.5 rounded-lg">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span class="font-mono">1m</span>
+</div>
+</div>
+<button class="w-full md:w-auto bg-primary hover:bg-primary-dark text-white font-bold py-2 px-6 rounded-lg flex items-center justify-center gap-2 transition-transform active:scale-95 shadow-md">
+<span>Focus</span>
+<span class="material-symbols-outlined text-lg">timer</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 3: Upcoming -->
+<div class="timeline-item relative flex gap-6 pb-8 group">
+<div class="timeline-line flex flex-col items-center">
+<div class="size-14 rounded-2xl bg-surface-dark border-2 border-surface-lighter flex items-center justify-center shrink-0 z-10 group-hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-text-muted group-hover:text-white transition-colors text-2xl">edit_note</span>
+</div>
+</div>
+<div class="flex-1">
+<div class="bg-surface-dark border border-surface-lighter rounded-xl p-5 flex flex-col md:flex-row gap-4 items-start justify-between hover:bg-surface-lighter/10 transition-colors cursor-pointer">
+<div class="flex-1">
+<div class="flex items-center gap-3 mb-2">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-purple-500/20 text-purple-400 border border-purple-500/30">Challenge</span>
+</div>
+<h4 class="text-lg font-bold text-text-main">Write Title &amp; 3 Bullet Points</h4>
+<p class="text-sm text-text-muted mt-1">Don't overthink. Just three raw ideas.</p>
+</div>
+<div class="flex items-center gap-3 self-end md:self-center">
+<div class="flex items-center gap-1 text-primary/80 font-bold">
+<span class="text-xs">+50 XP</span>
+</div>
+<div class="w-px h-4 bg-surface-lighter"></div>
+<div class="flex items-center gap-1 text-text-muted">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span class="text-sm font-medium">2m</span>
+</div>
+<button class="size-8 rounded-full bg-surface-lighter flex items-center justify-center hover:bg-primary hover:text-white transition-colors text-text-muted ml-2">
+<span class="material-symbols-outlined text-sm">play_arrow</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 4: Upcoming -->
+<div class="timeline-item relative flex gap-6 pb-8 group">
+<div class="timeline-line flex flex-col items-center">
+<div class="size-14 rounded-2xl bg-surface-dark border-2 border-surface-lighter flex items-center justify-center shrink-0 z-10 group-hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-text-muted group-hover:text-white transition-colors text-2xl">image</span>
+</div>
+</div>
+<div class="flex-1">
+<div class="bg-surface-dark border border-surface-lighter rounded-xl p-5 flex flex-col md:flex-row gap-4 items-start justify-between hover:bg-surface-lighter/10 transition-colors cursor-pointer">
+<div class="flex-1">
+<div class="flex items-center gap-3 mb-2">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-pink-500/20 text-pink-400 border border-pink-500/30">Novelty</span>
+</div>
+<h4 class="text-lg font-bold text-text-main">Find One Inspiring Image</h4>
+<p class="text-sm text-text-muted mt-1">Search for 'tech abstract' or similar.</p>
+</div>
+<div class="flex items-center gap-3 self-end md:self-center">
+<div class="flex items-center gap-1 text-primary/80 font-bold">
+<span class="text-xs">+15 XP</span>
+</div>
+<div class="w-px h-4 bg-surface-lighter"></div>
+<div class="flex items-center gap-1 text-text-muted">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span class="text-sm font-medium">3m</span>
+</div>
+<button class="size-8 rounded-full bg-surface-lighter flex items-center justify-center hover:bg-primary hover:text-white transition-colors text-text-muted ml-2">
+<span class="material-symbols-outlined text-sm">play_arrow</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Add Step Button -->
+<div class="relative flex gap-6 pb-8">
+<div class="flex flex-col items-center w-14">
+<div class="w-0.5 h-full bg-surface-lighter/30 absolute left-[27px] top-0 bottom-0 z-0"></div>
+<button class="relative size-10 rounded-full bg-surface-dark border border-dashed border-text-muted hover:border-primary hover:text-primary text-text-muted flex items-center justify-center z-10 transition-all hover:scale-110">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+<div class="flex-1 py-2">
+<p class="text-sm text-text-muted italic">Add manual step...</p>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Chat Bubble (Floating) -->
+<div class="absolute bottom-6 right-6 z-30">
+<button class="group flex items-center gap-3 bg-surface-dark border border-primary/30 shadow-[0_4px_20px_rgba(0,0,0,0.5)] p-4 rounded-2xl hover:border-primary transition-all">
+<div class="relative">
+<div class="size-10 rounded-full bg-gradient-to-br from-primary to-orange-600 flex items-center justify-center text-white">
+<span class="material-symbols-outlined">smart_toy</span>
+</div>
+<div class="absolute -top-1 -right-1 size-3 bg-red-500 rounded-full border-2 border-surface-dark"></div>
+</div>
+<div class="flex flex-col items-start text-left">
+<span class="text-xs font-bold text-primary">Gemini Assistant</span>
+<span class="text-sm text-white font-medium">I can help refine these steps.</span>
+</div>
+<div class="ml-2 opacity-0 group-hover:opacity-100 transition-opacity -translate-x-2 group-hover:translate-x-0">
+<span class="material-symbols-outlined text-text-muted">chevron_right</span>
+</div>
+</button>
+</div>
+</main>
+</div>
+</body></html>

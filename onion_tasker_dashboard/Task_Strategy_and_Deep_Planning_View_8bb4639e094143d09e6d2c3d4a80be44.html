@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Onion Tasker - Deep Planning</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d59f2",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#0f0f12", // Updated to match context dark charcoal
+                        "surface-dark": "#1a1f2b",
+                        "border-dark": "#2a3245",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.375rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar for better aesthetic in dark mode */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f0f12;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2a3245;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3e4b66;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex overflow-hidden font-display">
+<!-- Main Dashboard Placeholder (Context) -->
+<div aria-hidden="true" class="hidden md:flex flex-col flex-1 opacity-40 pointer-events-none p-6 gap-6">
+<!-- Just visual noise to imply the main app is behind -->
+<div class="flex items-center justify-between mb-8">
+<div class="h-8 w-32 bg-slate-200 dark:bg-surface-dark rounded"></div>
+<div class="flex gap-4">
+<div class="size-8 rounded-full bg-slate-200 dark:bg-surface-dark"></div>
+<div class="size-8 rounded-full bg-slate-200 dark:bg-surface-dark"></div>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-6 h-full">
+<div class="col-span-3 h-full bg-slate-200 dark:bg-surface-dark rounded-xl"></div>
+<div class="col-span-9 flex flex-col gap-4">
+<div class="h-32 w-full bg-slate-200 dark:bg-surface-dark rounded-xl"></div>
+<div class="h-32 w-full bg-slate-200 dark:bg-surface-dark rounded-xl"></div>
+<div class="h-32 w-full bg-slate-200 dark:bg-surface-dark rounded-xl"></div>
+</div>
+</div>
+</div>
+<!-- Side Panel Overlay -->
+<div class="fixed inset-y-0 right-0 w-full md:w-[600px] lg:w-[680px] bg-[#131823] dark:bg-[#131823] border-l border-border-dark shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out z-50">
+<!-- Sticky Header -->
+<header class="flex items-center justify-between px-6 py-5 border-b border-border-dark bg-[#131823] z-10">
+<div class="flex items-center gap-3">
+<div class="flex items-center justify-center size-8 rounded bg-primary/20 text-primary">
+<span class="material-symbols-outlined text-xl">layers</span>
+</div>
+<div>
+<h2 class="text-sm font-semibold text-primary uppercase tracking-wide">Deep Planning</h2>
+<div class="flex items-center gap-2">
+<span class="text-xs text-slate-400">Powered by OnionAI</span>
+<span class="material-symbols-outlined text-[14px] text-primary animate-pulse">auto_awesome</span>
+</div>
+</div>
+</div>
+<button class="size-9 flex items-center justify-center rounded-lg hover:bg-white/5 text-slate-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto px-6 py-6 md:px-8 custom-scrollbar">
+<!-- Task Title Input -->
+<div class="mb-8">
+<label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Target Task</label>
+<input class="w-full bg-transparent border-0 border-b-2 border-slate-700 text-2xl md:text-3xl font-bold text-white placeholder-slate-600 focus:border-primary focus:ring-0 px-0 py-2 transition-colors" type="text" value="Finalize Q3 Quarterly Report"/>
+</div>
+<!-- Section 1: The Questionnaire (The Onion Peel) -->
+<section class="space-y-8">
+<!-- Q1: Minimum Deliverable -->
+<div class="bg-surface-dark rounded-xl p-5 border border-border-dark shadow-lg">
+<div class="flex items-start justify-between mb-3">
+<label class="flex items-center gap-2 text-primary font-medium text-lg">
+<span class="material-symbols-outlined">filter_center_focus</span>
+                            Minimum Viable Deliverable
+                        </label>
+<button class="text-xs flex items-center gap-1 text-primary hover:text-primary/80 transition-colors">
+<span class="material-symbols-outlined text-[16px]">temp_preferences_custom</span>
+                            AI Suggest
+                        </button>
+</div>
+<p class="text-slate-400 text-sm mb-4 leading-relaxed">
+                        Let's peel back the layers. What is the <span class="text-white font-semibold">absolute minimum version</span> of this task that still counts as a win?
+                    </p>
+<div class="relative group">
+<textarea class="w-full bg-[#0f1219] border border-slate-700 rounded-lg p-4 text-base text-slate-200 placeholder-slate-600 focus:border-primary focus:ring-1 focus:ring-primary min-h-[120px] resize-none transition-all" placeholder="e.g., A rough Google Doc with just the 3 key metrics and a bulleted summary..."></textarea>
+</div>
+</div>
+<!-- Q2: Consequences -->
+<div class="bg-surface-dark rounded-xl p-5 border border-border-dark shadow-lg">
+<label class="flex items-center gap-2 text-white font-medium text-lg mb-3">
+<span class="material-symbols-outlined text-orange-400">warning</span>
+                        Consequences of Incompletion
+                    </label>
+<p class="text-slate-400 text-sm mb-4">What happens if this is late or incomplete?</p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+<label class="cursor-pointer">
+<input class="peer sr-only" name="impact" type="radio"/>
+<div class="rounded-lg border border-slate-700 bg-[#0f1219] p-3 text-center hover:bg-white/5 peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary transition-all">
+<span class="block text-sm font-semibold">Low Impact</span>
+</div>
+</label>
+<label class="cursor-pointer">
+<input checked="" class="peer sr-only" name="impact" type="radio"/>
+<div class="rounded-lg border border-slate-700 bg-[#0f1219] p-3 text-center hover:bg-white/5 peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary transition-all">
+<span class="block text-sm font-semibold">Medium Impact</span>
+</div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="impact" type="radio"/>
+<div class="rounded-lg border border-slate-700 bg-[#0f1219] p-3 text-center hover:bg-white/5 peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary transition-all">
+<span class="block text-sm font-semibold">High Impact</span>
+</div>
+</label>
+</div>
+<textarea class="w-full bg-[#0f1219] border border-slate-700 rounded-lg p-3 text-sm text-slate-200 placeholder-slate-600 focus:border-primary focus:ring-1 focus:ring-primary min-h-[80px] resize-none" placeholder="Describe the fallout... (e.g., Block the engineering team for 2 days)"></textarea>
+</div>
+</section>
+<div class="my-8 h-px bg-slate-800 w-full"></div>
+<!-- Section 2: Effort & Hierarchy -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Effort Sizing -->
+<div>
+<label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Effort Estimation</label>
+<div class="flex gap-2">
+<label class="cursor-pointer flex-1">
+<input class="peer sr-only" name="tshirt" type="radio"/>
+<div class="h-10 flex items-center justify-center rounded border border-slate-700 bg-[#0f1219] text-slate-400 text-sm font-bold hover:border-slate-500 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary transition-all">XS</div>
+</label>
+<label class="cursor-pointer flex-1">
+<input class="peer sr-only" name="tshirt" type="radio"/>
+<div class="h-10 flex items-center justify-center rounded border border-slate-700 bg-[#0f1219] text-slate-400 text-sm font-bold hover:border-slate-500 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary transition-all">S</div>
+</label>
+<label class="cursor-pointer flex-1">
+<input checked="" class="peer sr-only" name="tshirt" type="radio"/>
+<div class="h-10 flex items-center justify-center rounded border border-slate-700 bg-[#0f1219] text-slate-400 text-sm font-bold hover:border-slate-500 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary transition-all">M</div>
+</label>
+<label class="cursor-pointer flex-1">
+<input class="peer sr-only" name="tshirt" type="radio"/>
+<div class="h-10 flex items-center justify-center rounded border border-slate-700 bg-[#0f1219] text-slate-400 text-sm font-bold hover:border-slate-500 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary transition-all">L</div>
+</label>
+<label class="cursor-pointer flex-1">
+<input class="peer sr-only" name="tshirt" type="radio"/>
+<div class="h-10 flex items-center justify-center rounded border border-slate-700 bg-[#0f1219] text-slate-400 text-sm font-bold hover:border-slate-500 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary transition-all">XL</div>
+</label>
+</div>
+</div>
+<!-- Hierarchy / Goal Context -->
+<div>
+<label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Hierarchy</label>
+<div class="bg-[#0f1219] border border-slate-700 rounded-lg p-3">
+<div class="flex items-center gap-2 text-xs text-slate-400 mb-2">
+<span class="material-symbols-outlined text-[14px]">flag</span>
+                            Parent Goal
+                        </div>
+<div class="flex items-center gap-2 pl-1 mb-2">
+<div class="w-px h-full bg-slate-700"></div>
+<span class="text-sm text-slate-200 font-medium truncate">Q3 Financial Close</span>
+</div>
+<div class="flex items-center gap-2 pl-3">
+<span class="material-symbols-outlined text-primary text-[16px] rotate-90">subdirectory_arrow_right</span>
+<span class="text-sm text-primary font-bold truncate">Finalize Q3 Report</span>
+</div>
+</div>
+</div>
+</section>
+<div class="my-8 h-px bg-slate-800 w-full"></div>
+<!-- Section 3: Focus Timer Configuration -->
+<section class="mb-24">
+<div class="flex items-center justify-between mb-4">
+<label class="flex items-center gap-2 text-white font-medium text-lg">
+<span class="material-symbols-outlined">timer</span>
+                        Set Focus Timer
+                    </label>
+<span class="text-xs text-slate-400 bg-slate-800 px-2 py-1 rounded">Pomodoro Friendly</span>
+</div>
+<div class="bg-surface-dark border border-border-dark rounded-xl p-6">
+<div class="flex flex-wrap gap-4 justify-center md:justify-start">
+<button class="px-6 py-3 rounded-full border border-slate-600 bg-transparent text-slate-300 hover:border-primary hover:text-primary transition-all">
+                            25m
+                        </button>
+<button class="px-6 py-3 rounded-full border border-slate-600 bg-transparent text-slate-300 hover:border-primary hover:text-primary transition-all">
+                            45m
+                        </button>
+<button class="relative px-8 py-3 rounded-full border-2 border-primary bg-primary/10 text-primary font-bold shadow-[0_0_15px_rgba(13,89,242,0.3)] transition-all">
+<span class="absolute -top-2 -right-2 flex size-4">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full size-4 bg-primary"></span>
+</span>
+                            60m
+                        </button>
+<button class="px-6 py-3 rounded-full border border-slate-600 bg-transparent text-slate-300 hover:border-primary hover:text-primary transition-all">
+                            90m
+                        </button>
+<div class="flex items-center gap-2 ml-auto border-l border-slate-700 pl-4">
+<span class="text-sm text-slate-400">Custom:</span>
+<input class="w-16 bg-[#0f1219] border border-slate-700 rounded p-1 text-center text-white focus:border-primary focus:ring-1 focus:ring-primary" placeholder="min" type="number"/>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Sticky Footer Action Bar -->
+<footer class="p-6 border-t border-border-dark bg-[#131823] flex justify-between items-center z-10">
+<button class="text-slate-400 hover:text-white text-sm font-medium transition-colors">
+                Save as Draft
+            </button>
+<button class="flex items-center gap-2 bg-primary hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg shadow-blue-900/20 transform active:scale-95 transition-all">
+<span class="material-symbols-outlined">rocket_launch</span>
+                Commit to Plan
+            </button>
+</footer>
+</div>
+</body></html>
