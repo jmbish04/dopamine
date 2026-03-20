@@ -108,7 +108,7 @@ export function resolveDefaultAiModel(env: Partial<Env>, provider?: SupportedPro
 }
 
 async function resolveGatewayApiKey(env: Env): Promise<string> {
-  const apiKey = await env.AI_GATEWAY_TOKEN.get();
+  const apiKey = await getSecret(env, "AI_GATEWAY_TOKEN");
   if (!apiKey) {
     throw new Error("AI_GATEWAY_TOKEN is required for OpenAI Agents SDK calls.");
   }
