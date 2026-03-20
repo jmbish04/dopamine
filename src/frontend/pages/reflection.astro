@@ -1,0 +1,8 @@
+---
+import { ReflectionBoard } from "@frontend/components/reflection/ReflectionBoard";
+import BaseLayout from "@frontend/layouts/BaseLayout.astro";
+---
+
+<BaseLayout current="reflection" title="Reflection · Dopamine">
+  <ReflectionBoard client:load />
+</BaseLayout>

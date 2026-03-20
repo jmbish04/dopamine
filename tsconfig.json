@@ -1,0 +1,93 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      "@/ai":          ["src/backend/ai/index.ts"],
+      "@/ai/*":        ["src/backend/ai/*"],
+      "@/utils/*":     ["src/backend/utils/*"],
+      "@/lib/*":       ["src/backend/lib/*"],
+      "@/services/*":  ["src/backend/services/*"],
+      "@/modules/*":   ["src/backend/modules/*"],
+      "@/shared/*":    ["src/backend/shared/*"],
+      // ── Legacy short-form aliases (used in agent-sdk.ts + older files) ─────
+      "@agent-sdk":    ["src/backend/ai/agent-sdk.ts"],
+      "@db":           ["src/backend/db/index.ts"],
+      "@db/*":         ["src/backend/db/*"],
+      "@utils/*":      ["src/backend/utils/*"],
+      "@logging":      ["src/backend/logging/index.ts"],
+      "@logging/*":    ["src/backend/logging/*"],
+      "@research-logger": ["src/backend/logging/ResearchLogger.ts"],
+      "@/api": [
+        "src/backend/api/index.ts"
+      ],
+      "@/api/*": [
+        "src/backend/api/*"
+      ],
+      "@/db": [
+        "src/backend/db/index.ts"
+      ],
+      "@/db/*": [
+        "src/backend/db/*"
+      ],
+      "@/db/schema": [
+        "src/backend/db/schemas/index.ts"
+      ],
+      "@/db/schema/*": [
+        "src/backend/db/schemas/*"
+      ],
+      "@/health": [
+        "src/backend/health/index.ts"
+      ],
+      "@/health/*": [
+        "src/backend/health/*"
+      ],
+      "@/logging": [
+        "src/backend/logging/index.ts"
+      ],
+      "@/logging/*": [
+        "src/backend/logging/*"
+      ],
+      "@/routes": [
+        "src/backend/routes/index.ts"
+      ],
+      "@/routes/*": [
+        "src/backend/routes/*"
+      ],
+      "@backend/*": [
+        "src/backend/*"
+      ],
+      "@frontend/*": [
+        "src/frontend/*"
+      ],
+      "@/cloudflare/*": [
+        "src/backend/services/cloudflare/*"
+      ]
+    },
+    "types": [
+      "@cloudflare/workers-types",
+      "./worker-configuration.d.ts"
+    ],
+    "noEmit": true
+  },
+  "include": [
+    "astro.config.mjs",
+    "tailwind.config.mjs",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.astro",
+    "worker-configuration.d.ts"
+  ]
+}

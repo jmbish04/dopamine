@@ -1,0 +1,67 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "../../components/ui/card";
+import { PythonCodeBlock } from "../../components/docs/PythonCodeBlock";
+---
+
+<BaseLayout current="docs" title="Python AI Diagnostics | Dopamine">
+  <div class="space-y-6 max-w-4xl mx-auto py-8 text-foreground pb-24">
+    <div class="space-y-2">
+      <h1 class="text-4xl font-bold tracking-tight">Python AI Diagnostics</h1>
+      <p class="text-xl text-muted-foreground">
+        Integrating the Raspberry Pi scanner with Cloudflare Workers AI.
+      </p>
+    </div>
+
+    <Card className="border-white/10 bg-black/20 onion-grid">
+      <CardHeader>
+        <CardTitle>Endpoint Details</CardTitle>
+        <CardDescription>Target URL for the local Py script</CardDescription>
+      </CardHeader>
+      <CardContent className="grid gap-2 text-sm text-zinc-300">
+        <p>
+          <strong class="text-onion-cyan">URL:</strong> https://dopamine.hacolby.workers.dev/api/printer/ai
+        </p>
+        <p><strong class="text-onion-cyan">Method:</strong> POST</p>
+        <p>
+          <strong class="text-onion-cyan">Headers:</strong> Content-Type: application/json
+        </p>
+        <div class="pt-2">
+          <strong class="text-white">Payload Properties:</strong>
+          <ul class="list-disc pl-5 mt-2 space-y-1">
+            <li>
+              <code class="text-onion-orange">prompt</code> (string): The raw error
+              string logs.
+            </li>
+            <li>
+              <code class="text-onion-orange">schema</code> (object): JSON schema
+              for structural overrides.
+            </li>
+            <li>
+              <code class="text-onion-orange">model</code> (string): Edge model to
+              target.
+            </li>
+          </ul>
+        </div>
+      </CardContent>
+    </Card>
+
+    <Card className="border-white/10 bg-black/40">
+      <CardHeader>
+        <CardTitle>Implementation Template</CardTitle>
+        <CardDescription
+          >Drop this into your script to triage errors.</CardDescription
+        >
+      </CardHeader>
+      <CardContent>
+        <PythonCodeBlock client:load />
+      </CardContent>
+    </Card>
+  </div>
+</BaseLayout>

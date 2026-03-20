@@ -1,0 +1,21 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SpotifyPlayer } from "../components/spotify/SpotifyPlayer";
+---
+
+<BaseLayout title="Lofi Beats | Dopamine" current="spotify">
+  <div class="flex h-full flex-col p-6">
+    <div
+      class="mb-6 rounded-2xl border border-onion-blue/20 bg-onion-blue/10 p-6"
+    >
+      <h2 class="text-2xl font-bold text-white">AI Lofi DJ Focus Soundscape</h2>
+      <p class="mt-2 text-sm text-onion-cyan">
+        Neural alignment via Spotify playback orchestration. Enter your target
+        mood and let the agent mix your tracks.
+      </p>
+    </div>
+
+    <!-- Interactive Audio Playback React Island -->
+    <SpotifyPlayer client:load />
+  </div>
+</BaseLayout>

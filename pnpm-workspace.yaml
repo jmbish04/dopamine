@@ -1,0 +1,7 @@
+onlyBuiltDependencies:
+  - core-js-pure
+  - esbuild
+  - protobufjs
+  - sharp
+  - sqlite3
+  - workerd
