@@ -1,0 +1,1 @@
+ALTER TABLE `system_logs` ADD `source` text DEFAULT 'worker' NOT NULL;

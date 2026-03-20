@@ -1,0 +1,8 @@
+---
+import { RewardsStore } from "@frontend/components/rewards/RewardsStore";
+import BaseLayout from "@frontend/layouts/BaseLayout.astro";
+---
+
+<BaseLayout current="rewards" title="Rewards Store · Dopamine">
+  <RewardsStore client:load />
+</BaseLayout>

@@ -1,12 +1,225 @@
 {
-  "name": "focus-onion",
-  "main": "src/index.ts",
-  "compatibility_date": "2025-02-25",
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "focus-onion-db",
-      "database_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-    }
-  ]
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "dopamine",
+	"main": "src/backend/index.ts",
+	"compatibility_date": "2026-02-28",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"upload_source_maps": true,
+	"dev": {
+		"port": 8887,
+		"ip": "127.0.0.1",
+		"local_protocol": "http"
+	},
+	"observability": {
+		"enabled": true,
+		"logs": {
+			"enabled": true,
+			"invocation_logs": true
+		},
+		"traces": {
+			"enabled": false
+		}
+	},
+	"vars": {
+		"HEALTH_SANDBOX_TIMEOUT_MS": 15000,
+		"USE_OPENAI_MODELS": true,
+		"MAX_AI_BUDGET": 150,
+		"AI_GATEWAY_NAME": "default-gateway",
+		"WORKER_NAME": "dopamine"
+	},
+	"assets": {
+		"directory": "dist/client",
+		"binding": "ASSETS",
+		"run_worker_first": true,
+		"not_found_handling": "single-page-application"
+	},
+	"triggers": {
+		"crons": [
+			"0 8 * * 1"   // Weekly: Monday 8am UTC — health scan
+		]
+	},
+	// ------- NEW: AI & KV bindings ------------------------------------------------
+	"ai": {
+		// This automatically creates the built‑in Workers‑AI binding named "AI".
+		"binding": "AI"
+	},
+	"images": {
+		"binding": "IMAGES"
+	},
+	"kv_namespaces": [
+		{
+			"binding": "KV",
+			"id": "dee70253239c4eff80639cc9f1cacf00"
+		},
+		{
+			// Live-editable config store: agent system prompts, feature flags, etc.
+			"binding": "KV_CONFIGS",
+			"id": "c14465835ca24e8caf18fb36902b10ff",
+			"remote": true
+		}
+	],
+	// ---------------------------------------------------------------------------
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "dopamine",
+			"database_id": "c9efa741-7cd6-4122-b834-ca4514ca6a43",
+			"migrations_dir": "./src/backend/db/migrations"
+		}
+	],
+	"vpc_services": [
+		{
+			"binding": "PRINTER_VPC",
+			"service_id": "019cc376-3748-7902-995e-89a1f6e81818",
+			"remote": true
+		}
+	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "PLANNER",
+				"class_name": "PlannerAgent"
+			},
+			{
+				"name": "SUPERVISOR",
+				"class_name": "Supervisor"
+			},
+			{
+				"name": "PRINTER_HUB",
+				"class_name": "PrinterHub"
+			},
+			{
+				"name": "SPOTIFY_AGENT",
+				"class_name": "SpotifyAgent"
+			},
+			{
+				"name": "EMAIL_AGENT",
+				"class_name": "EmailAgent"
+			},
+			{
+				"name": "SPOTIFY_OAUTH_STORE",
+				"class_name": "SpotifyOAuthStore"
+			},
+			{
+				"name": "MOTIVATIONAL_AGENT",
+				"class_name": "MotivationalAgent"
+			},
+			{
+				"name": "SPOTIFY_SYNC_HUB",
+				"class_name": "SpotifySyncHub"
+			}
+		]
+	},
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_sqlite_classes": [
+				"PlannerAgent",
+				"Supervisor",
+				"PrinterHub",
+				"SpotifyAgent",
+				"EmailAgent",
+				"SpotifyOAuthStore"
+			]
+		},
+		{
+			"tag": "v2",
+			"new_sqlite_classes": [
+				"MotivationalAgent"
+			]
+		},
+		{
+			"tag": "v3",
+			"new_sqlite_classes": [
+				"SpotifySyncHub"
+			]
+		}
+	],
+	"secrets_store_secrets": [
+		{
+			"binding": "GITHUB_TOKEN",
+			"store_id": "8c42fa70938644e0a8a109744467375f",
+			"secret_name": "GITHUB_TOKEN"
+		},
+		{
+			"binding": "CLOUDFLARE_API_TOKEN",
+			"store_id": "8c42fa70938644e0a8a109744467375f",
+			"secret_name": "CLOUDFLARE_API_TOKEN"
+		},
+		{
+			"binding": "OPENAI_API_KEY",
+			"store_id": "8c42fa70938644e0a8a109744467375f",
+			"secret_name": "OPENAI_API_KEY"
+		},
+		{
+			"binding": "CLOUDFLARE_ACCOUNT_ID",
+			"store_id": "8c42fa70938644e0a8a109744467375f",
+			"secret_name": "CLOUDFLARE_ACCOUNT_ID"
+		},
+		{
+			"binding": "CLOUDFLARE_SECRETS_STORE_TOKEN",
+			"store_id": "8c42fa70938644e0a8a109744467375f",
+			"secret_name": "CLOUDFLARE_SECRETS_STORE_TOKEN"
+		},
+		{
+			"binding": "WORKER_API_KEY",
+			"store_id": "8c42fa70938644e0a8a109744467375f",
+			"secret_name": "WORKER_API_KEY"
+		},
+		{
+			"binding": "AI_GATEWAY_TOKEN",
+			"store_id": "8c42fa70938644e0a8a109744467375f",
+			"secret_name": "CLOUDFLARE_AI_GATEWAY_TOKEN"
+		},
+		{
+			"binding": "CF_BROWSER_RENDER_TOKEN",
+			"store_id": "8c42fa70938644e0a8a109744467375f",
+			"secret_name": "CLOUDFLARE_BROWSER_RENDER_TOKEN"
+		},
+		{
+			"binding": "JULES_API_KEY",
+			"store_id": "8c42fa70938644e0a8a109744467375f",
+			"secret_name": "JULES_API_KEY"
+		},
+		{
+			"binding": "GEMINI_API_KEY",
+			"store_id": "8c42fa70938644e0a8a109744467375f",
+			"secret_name": "GEMINI_API_KEY"
+		},
+		{
+			"binding": "ANTHROPIC_API_KEY",
+			"store_id": "8c42fa70938644e0a8a109744467375f",
+			"secret_name": "ANTHROPIC_API_KEY"
+		},
+		{
+			"binding": "CLOUDFLARE_AI_SEARCH_TOKEN",
+			"store_id": "8c42fa70938644e0a8a109744467375f",
+			"secret_name": "CLOUDFLARE_AI_SEARCH_TOKEN"
+		},
+		{
+			"binding": "AGENTIC_WORKER_API_KEY",
+			"store_id": "8c42fa70938644e0a8a109744467375f",
+			"secret_name": "AGENTIC_WORKER_API_KEY"
+		},
+		{
+			"binding": "SPOTIFY_CLIENT_ID",
+			"store_id": "8c42fa70938644e0a8a109744467375f",
+			"secret_name": "SPOTIFY_CLIENT_ID"
+		},
+		{
+			"binding": "SPOTIFY_CLIENT_SECRET",
+			"store_id": "8c42fa70938644e0a8a109744467375f",
+			"secret_name": "SPOTIFY_CLIENT_SECRET"
+		}
+	],
+	// wrangler vectorize create dopamine-logs --preset @cf/baai/bge-large-en-v1.5
+	"vectorize": [
+		{
+			"binding": "VECTORIZE_LOGS",
+			"index_name": "dopamine-logs",
+			"remote": true
+		}
+	]
 }

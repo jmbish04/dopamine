@@ -1,0 +1,8 @@
+---
+import { DashboardExperience } from "@frontend/components/dashboard/DashboardExperience";
+import BaseLayout from "@frontend/layouts/BaseLayout.astro";
+---
+
+<BaseLayout current="dashboard" title="Dopamine">
+  <DashboardExperience client:load />
+</BaseLayout>

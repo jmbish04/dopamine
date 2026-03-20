@@ -1,0 +1,10 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { KanbanView } from "../components/KanbanView";
+---
+
+<BaseLayout current="kanban" title="Kanban" fullWidth={true}>
+  <main class="flex-1 w-full overflow-hidden bg-background">
+    <KanbanView client:load />
+  </main>
+</BaseLayout>
