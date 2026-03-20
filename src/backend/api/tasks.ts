@@ -250,7 +250,7 @@ export const generateTaskAudio = async (env: Env, task: SerializedTask, action: 
     // 1. Get motivation transcript from our Honi Agent
     const prompt = `Task '${task.title}' has been ${action}. ${task.xp ? `XP: ${task.xp}` : ""}`;
     
-    // routeToAgent returns the raw text response or an object if properly formatted
+    const motivationRes = await routeToAgent(env, { binding: "MOTIVATIONAL_AGENT" }, prompt);
     const motivationRes = await routeToAgent(env as any, { binding: "MOTIVATIONAL_AGENT" }, prompt) as any;
     
     // Safe extraction if motivationRes is a Response object or direct text
