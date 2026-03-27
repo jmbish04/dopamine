@@ -55,7 +55,12 @@ program.command('complete <id>')
   .description('Mark a task as completed')
   .action(async (id) => {
     try {
-      const res = await fetch(`${API_BASE}/tasks/${id}`, {
+      const taskId = parseInt(id, 10);
+      if (isNaN(taskId)) {
+        console.error(chalk.red('Error: Task ID must be a number.'));
+        return;
+      }
+      const res = await fetch(`${API_BASE}/tasks/${taskId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'completed' })
