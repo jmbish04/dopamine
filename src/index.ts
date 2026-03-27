@@ -148,7 +148,7 @@ app.openapi(updateTaskRoute, async (c) => {
   const body = c.req.valid('json');
   const db = drizzle(c.env.DB);
 
-  const updateData: any = {};
+  const updateData: { status?: string; duration?: number } = {};
   if (body.status !== undefined) updateData.status = body.status;
   if (body.duration !== undefined) updateData.duration = body.duration;
 
