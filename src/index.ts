@@ -7,6 +7,7 @@ import { eq } from 'drizzle-orm';
 export type Env = {
   DB: D1Database;
   AI_GATEWAY_URL: string;
+  OPENAI_API_KEY: string;
 };
 
 const app = new OpenAPIHono<{ Bindings: Env }>();
@@ -120,15 +121,34 @@ const updateTaskRoute = createRoute({
       },
       description: 'Update a task',
     },
+    400: {
+      content: {
+        'application/json': {
+          schema: z.object({ error: z.string() }),
+        },
+      },
+      description: 'Invalid ID',
+    },
+    404: {
+      content: {
+        'application/json': {
+          schema: z.object({ error: z.string() }),
+        },
+      },
+      description: 'Task not found',
+    },
   },
 });
 
 app.openapi(updateTaskRoute, async (c) => {
   const id = parseInt(c.req.valid('param').id, 10);
+  if (isNaN(id)) {
+    return c.json({ error: 'Invalid ID' }, 400);
+  }
   const body = c.req.valid('json');
   const db = drizzle(c.env.DB);
 
-  const updateData: { status?: string; duration?: number } = {};
+  const updateData: any = {};
   if (body.status !== undefined) updateData.status = body.status;
   if (body.duration !== undefined) updateData.duration = body.duration;
 
@@ -136,6 +156,10 @@ app.openapi(updateTaskRoute, async (c) => {
     .set(updateData)
     .where(eq(tasks.id, id))
     .returning().get();
+
+  if (!result) {
+    return c.json({ error: 'Task not found' }, 404);
+  }
 
   return c.json({
     id: result.id,
@@ -171,19 +195,33 @@ const aiDJRoute = createRoute({
       },
       description: 'AI DJ Response via Cloudflare AI Gateway',
     },
+    500: {
+      content: {
+        'application/json': {
+          schema: z.object({
+            error: z.string().optional(),
+            response: z.string().optional(),
+          }),
+        },
+      },
+      description: 'Error response',
+    },
   },
 });
 
 app.openapi(aiDJRoute, async (c) => {
   const { prompt } = c.req.valid('json');
-  const gatewayUrl = c.env.AI_GATEWAY_URL || "https://gateway.ai.cloudflare.com/v1/ACCOUNT_ID/focus-onion-gateway/openai/chat/completions";
+  const gatewayUrl = c.env.AI_GATEWAY_URL;
+  if (!gatewayUrl) {
+    return c.json({ error: 'AI_GATEWAY_URL is not configured' }, 500);
+  }
 
   try {
     const aiResponse = await fetch(gatewayUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+        'Authorization': `Bearer ${c.env.OPENAI_API_KEY}`
       },
       body: JSON.stringify({
         model: 'gpt-5.4-mini',
@@ -193,7 +231,7 @@ app.openapi(aiDJRoute, async (c) => {
     const data = await aiResponse.json() as any;
     return c.json({ response: data.choices?.[0]?.message?.content || 'Vibe adjusted.' }, 200);
   } catch (error) {
-    return c.json({ response: 'Error connecting to AI Gateway.' }, 200);
+    return c.json({ response: 'Error connecting to AI Gateway.' }, 500);
   }
 });
 

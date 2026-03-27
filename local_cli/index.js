@@ -15,6 +15,10 @@ program.command('tasks')
   .action(async () => {
     try {
       const res = await fetch(`${API_BASE}/tasks`);
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(`API Error: ${res.status} ${res.statusText} - ${errorText}`);
+      }
       const tasks = await res.json();
       console.log(chalk.bold.blue('\nYour Tasks:'));
       tasks.forEach(t => {
@@ -23,7 +27,7 @@ program.command('tasks')
       });
       console.log();
     } catch (e) {
-      console.error(chalk.red('Error fetching tasks. Is the local worker running?'));
+      console.error(chalk.red('Error fetching tasks. Is the local worker running?'), e);
     }
   });
 
@@ -36,10 +40,14 @@ program.command('add <title>')
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title })
       });
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(`API Error: ${res.status} ${res.statusText} - ${errorText}`);
+      }
       const task = await res.json();
       console.log(chalk.green(`✔ Task added: ${task.title} (ID: ${task.id})`));
     } catch (e) {
-      console.error(chalk.red('Error adding task.'));
+      console.error(chalk.red('Error adding task.'), e);
     }
   });
 
@@ -52,10 +60,14 @@ program.command('complete <id>')
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'completed' })
       });
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(`API Error: ${res.status} ${res.statusText} - ${errorText}`);
+      }
       const task = await res.json();
       console.log(chalk.green(`✔ Task ${id} marked as completed!`));
     } catch (e) {
-      console.error(chalk.red('Error completing task.'));
+      console.error(chalk.red('Error completing task.'), e);
     }
   });
 
