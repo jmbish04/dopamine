@@ -148,7 +148,7 @@ app.openapi(updateTaskRoute, async (c) => {
   const body = c.req.valid('json');
   const db = drizzle(c.env.DB);
 
-  const updateData: { status?: string; duration?: number } = {};
+  const updateData: any = {};
   if (body.status !== undefined) updateData.status = body.status;
   if (body.duration !== undefined) updateData.duration = body.duration;
 
@@ -215,13 +215,17 @@ app.openapi(aiDJRoute, async (c) => {
   if (!gatewayUrl) {
     return c.json({ error: 'AI_GATEWAY_URL is not configured' }, 500);
   }
+  const openAIApiKey = c.env.OPENAI_API_KEY;
+  if (!openAIApiKey) {
+    return c.json({ error: 'OPENAI_API_KEY is not configured' }, 500);
+  }
 
   try {
     const aiResponse = await fetch(gatewayUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${c.env.OPENAI_API_KEY}`
+        'Authorization': `Bearer ${openAIApiKey}`
       },
       body: JSON.stringify({
         model: 'gpt-5.4-mini',

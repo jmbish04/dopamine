@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 import chalk from 'chalk';
 
 const program = new Command();
-const API_BASE = process.env.API_BASE || 'http://127.0.0.1:8787/api';
+const API_BASE = 'http://127.0.0.1:8787/api';
 
 program
   .name('dopamine')
@@ -55,12 +55,7 @@ program.command('complete <id>')
   .description('Mark a task as completed')
   .action(async (id) => {
     try {
-      const taskId = parseInt(id, 10);
-      if (isNaN(taskId)) {
-        console.error(chalk.red('Error: Task ID must be a number.'));
-        return;
-      }
-      const res = await fetch(`${API_BASE}/tasks/${taskId}`, {
+      const res = await fetch(`${API_BASE}/tasks/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'completed' })
