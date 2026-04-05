@@ -71,4 +71,34 @@ program.command('complete <id>')
     }
   });
 
+program.command('spotify-research')
+  .description('Trigger Spotify lofi music discovery workflow')
+  .option('-a, --agent <name>', 'Poster agent name', 'poster')
+  .action(async (options) => {
+    try {
+      console.log(chalk.blue('🎵 Starting Spotify lofi music discovery workflow...'));
+      const res = await fetch(`${API_BASE}/spotify/research`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ posterAgentName: options.agent })
+      });
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(`API Error: ${res.status} ${res.statusText} - ${errorText}`);
+      }
+      const result = await res.json();
+      console.log(chalk.green(`✔ ${result.message}`));
+      console.log(chalk.gray(`Workflow ID: ${result.workflowId}`));
+      console.log(chalk.yellow('\n💡 The workflow is now running in the background. It will:'));
+      console.log(chalk.gray('  1. Search for lofi hip hop playlists on Spotify'));
+      console.log(chalk.gray('  2. Discover artists from these playlists'));
+      console.log(chalk.gray('  3. Fetch detailed artist information'));
+      console.log(chalk.gray('  4. Enhance descriptions with AI'));
+      console.log(chalk.gray('  5. Optionally capture screenshots'));
+      console.log(chalk.gray('  6. Format results using the poster agent\n'));
+    } catch (e) {
+      console.error(chalk.red('Error starting Spotify research workflow.'), e);
+    }
+  });
+
 program.parse();

@@ -9,5 +9,16 @@
       "database_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
       "migrations_dir": "drizzle"
     }
-  ]
+  ],
+  "workflows": [
+    {
+      "name": "spotify-researcher",
+      "script_name": "spotify-researcher",
+      "class_name": "SpotifyResearcher",
+      "binding": "SPOTIFY_WORKFLOW"
+    }
+  ],
+  "browser": {
+    "binding": "BROWSER"
+  }
 }

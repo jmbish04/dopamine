@@ -8,6 +8,10 @@ export type Env = {
   DB: D1Database;
   AI_GATEWAY_URL: string;
   OPENAI_API_KEY: string;
+  SPOTIFY_CLIENT_ID: string;
+  SPOTIFY_CLIENT_SECRET: string;
+  SPOTIFY_WORKFLOW: Workflow;
+  BROWSER: Fetcher;
 };
 
 const app = new OpenAPIHono<{ Bindings: Env }>();
@@ -236,6 +240,65 @@ app.openapi(aiDJRoute, async (c) => {
     return c.json({ response: data.choices?.[0]?.message?.content || 'Vibe adjusted.' }, 200);
   } catch (error) {
     return c.json({ response: 'Error connecting to AI Gateway.' }, 500);
+  }
+});
+
+const triggerSpotifyResearchRoute = createRoute({
+  method: 'post',
+  path: '/api/spotify/research',
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: z.object({
+            posterAgentName: z.string().optional().openapi({ example: 'poster' }),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: z.object({
+            workflowId: z.string(),
+            message: z.string(),
+          }),
+        },
+      },
+      description: 'Spotify research workflow triggered',
+    },
+    500: {
+      content: {
+        'application/json': {
+          schema: z.object({ error: z.string() }),
+        },
+      },
+      description: 'Error triggering workflow',
+    },
+  },
+});
+
+app.openapi(triggerSpotifyResearchRoute, async (c) => {
+  try {
+    const { posterAgentName = 'poster' } = c.req.valid('json');
+
+    if (!c.env.SPOTIFY_WORKFLOW) {
+      return c.json({ error: 'Spotify workflow is not configured' }, 500);
+    }
+
+    const instance = await c.env.SPOTIFY_WORKFLOW.create({
+      params: { posterAgentName },
+    });
+
+    return c.json({
+      workflowId: instance.id,
+      message: 'Spotify lofi music discovery workflow started successfully',
+    }, 200);
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    return c.json({ error: `Failed to start workflow: ${errorMessage}` }, 500);
   }
 });
 
